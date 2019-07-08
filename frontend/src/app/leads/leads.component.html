@@ -1,0 +1,52 @@
+<div>
+<mat-table #table [dataSource]="leads">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+    <mat-cell *matCellDef="let lead"><a routerLink="/leads/{{ lead._id }}" routerLinkActive="active"> {{lead.title}} </a></mat-cell>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.description}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.status}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="user_assigned">
+    <mat-header-cell *matHeaderCellDef> User Assigned </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.user_assigned}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="client">
+    <mat-header-cell *matHeaderCellDef> Client </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.client}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="user_created">
+    <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.user_created}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="contact_date">
+    <mat-header-cell *matHeaderCellDef> Contact Date </mat-header-cell>
+    <mat-cell *matCellDef="let lead"> {{lead.contact_date}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="created_at">
+    <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+    <mat-cell *matCellDef="let lead">
+      <a routerLink="/leads/add/{{ lead['_id'] }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+      <a routerLink="/leads/delete/{{ lead['_id'] }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+</div>

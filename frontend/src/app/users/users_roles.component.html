@@ -1,0 +1,15 @@
+<h1>
+  Change roles for user:
+</h1>
+<div *ngIf="!checked_roles">
+  <mat-checkbox *ngFor="let role of roles" name="roles[]" [value]="role['name']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+</div>
+<div *ngIf="checked_roles">
+  <div *ngFor="let role of roles">
+  <mat-checkbox  *ngIf="checked_roles[role['id']]" name="roles[]" [value]="role['name']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+   <mat-checkbox  *ngIf="!checked_roles[role['id']]" name="roles[]" [value]="role['name']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+  </div>
+</div>
+<div class="form-group">
+  <button mat-button (click)="assignRole()">Добавити</button>
+</div>

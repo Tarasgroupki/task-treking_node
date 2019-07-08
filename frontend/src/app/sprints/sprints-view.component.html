@@ -1,0 +1,16 @@
+<div class="view">
+<mat-list role="list">
+  <mat-list-item role="listitem">ID: {{id}}</mat-list-item>
+  <mat-list-item role="listitem">Title: {{sprint['title']}}</mat-list-item>
+  <mat-list-item role="listitem">Description: {{sprint['description']}}</mat-list-item>
+  <mat-list-item role="listitem">Lead Assigned: {{sprint['lead_assigned_id']}}</mat-list-item>
+  <mat-list-item role="listitem">User Created: {{sprint['user_created_id']}}</mat-list-item>
+  <mat-list-item role="listitem">Invoice: {{sprint['invoice']}}</mat-list-item>
+  <mat-list-item role="listitem">Deadline: {{sprint['deadline']}}</mat-list-item>
+</mat-list>
+  <a routerLink="/sprints/add/{{ id }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+  <a routerLink="/sprints/delete/{{ id }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+</div>
+<div class="canvas" *ngIf="chart">
+  <canvas id="canvas">{{ chart }}</canvas>
+</div>

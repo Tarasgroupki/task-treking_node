@@ -1,0 +1,49 @@
+<div>
+<mat-table #table [dataSource]="users">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let user"><a routerLink="/users/{{ user._id }}" routerLinkActive="active"> {{user.name}} </a></mat-cell>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="password">
+    <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.password}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.address}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="work_number">
+    <mat-header-cell *matHeaderCellDef> Work Number </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.work_number}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="personal_number">
+    <mat-header-cell *matHeaderCellDef> Personal Number </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.personal_number}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="image_path">
+    <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+    <mat-cell *matCellDef="let user">
+      <a routerLink="/users/add_role/{{ user['_id'] }}" routerLinkActive="active"><button mat-button class="add_role">{{ 'Добавити ролі' }}</button></a>
+      <a routerLink="/users/add/{{ user['_id'] }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+      <a routerLink="/users/delete/{{ user['_id'] }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+</div>

@@ -1,0 +1,25 @@
+<mat-list role="list">
+  <mat-list-item role="listitem">ID: {{task['id']}}</mat-list-item>
+  <mat-list-item role="listitem">Title: {{task['title']}}</mat-list-item>
+  <mat-list-item role="listitem">Description: {{task['description']}}</mat-list-item>
+  <mat-list-item role="listitem">User Assigned: {{task['user_assigned_id']}}</mat-list-item>
+  <mat-list-item role="listitem">User Created: {{task['user_created_id']}}</mat-list-item>
+  <mat-list-item role="listitem">Client: {{task['client_id']}}</mat-list-item>
+  <mat-list-item role="listitem">Invoice: {{task['invoice']}}</mat-list-item>
+  <mat-list-item role="listitem">Deadline: {{task['deadline']}}</mat-list-item>
+</mat-list>
+<a routerLink="/tasks/add/{{ task['id'] }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+<a routerLink="/tasks/delete/{{ task['id'] }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+<div class="form-group">
+  <mat-form-field>
+    <mat-select id="mark" [(ngModel)]="selectedValue" (ngModelChange)="onSelectedChange($event)" placeholder="Vote" #vote="ngModel">
+      <mat-option *ngFor="let votes of votes_arr" [value]="votes.value">
+        {{ votes.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <button *ngIf="users.indexOf(user_id) != -1" mat-button (click)="updateVote()">Оцінити</button>
+  <button *ngIf="users.indexOf(user_id) == -1" mat-button (click)="addVote()">Оцінити(створити)</button>
+</div>

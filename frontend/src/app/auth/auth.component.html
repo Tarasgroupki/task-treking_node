@@ -1,0 +1,35 @@
+<div style="border-radius: 50px 50px 50px 50px;" class="container">
+  <div class="authorize" >
+  <img style="" width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="><br />
+    <h1>AUTHORIZATION</h1>
+  </div>
+  <div class="main">
+  <div class="form-group">
+    <mat-form-field>
+      <label for="email">Email</label>
+      <input id="email" matInput type="email" class="form-control" name="email" [(ngModel)]="auth.email" required pattern="[^ @]*@[^ @]*" #email="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="email.errors && (email.dirty || email.touched)">
+      <p *ngIf="email.errors.required">Email is required</p>
+      <p *ngIf="email.errors.pattern">Email must contain at least the @ character</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <mat-form-field>
+      <label for="password">Password</label>
+      <input id="password" matInput type="password" class="form-control" name="password" [(ngModel)]="auth.password" required minlength="8" #password="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="password.errors && (password.dirty || password.touched)">
+      <p *ngIf="password.errors.required">Password is required</p>
+    </div>
+  </div>
+  <div *ngIf="errMessage">
+    {{ errMessage }}
+  </div>
+  <div class="form-group">
+  <button style="border-radius: 50px 50px 50px 50px;" mat-button (click)="getAuth()" class="login">{{ 'Авторизуватися' }}</button>
+  </div>
+  </div>
+</div>

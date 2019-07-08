@@ -1,0 +1,117 @@
+<h1>
+  Updating client:
+</h1>
+<div class="form-group">
+  <mat-form-field>
+    <label for="name">Name</label>
+    <input id="name" matInput class="form-control" name="name" [(ngModel)]="client.name" required minlength="5" #name="ngModel"/>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="name.errors && (name.dirty || name.touched)">
+    <p *ngIf="name.errors.required">Name is required</p>
+    <p *ngIf="name.errors.minlength">Name must have more than 5 symbols</p>
+  </div>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="email">Email</label>
+    <input id="email" matInput type="email" class="form-control" name="email" [(ngModel)]="client.email" required pattern="[^ @]*@[^ @]*" #email="ngModel"/>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="email.errors && (email.dirty || email.touched)">
+    <p *ngIf="email.errors.required">Email is required</p>
+    <p *ngIf="email.errors.pattern">Email must contain at least the @ character</p>
+  </div>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="primary_phone">Primary Phone</label>
+    <input id="primary_phone" matInput type="text" class="form-control" name="primary_number" [(ngModel)]="client.primary_number" required minlength="8" #primary_number="ngModel"/>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="primary_number.errors && (primary_number.dirty || primary_number.touched)">
+    <p *ngIf="primary_number.errors.required">Primary number is required</p>
+    <p *ngIf="primary_number.errors.minlength">Primary number must have more than 8 symbols</p>
+  </div>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="secondary_phone">Secondary Phone</label>
+    <input id="secondary_phone" matInput type="text" class="form-control" name="secondary_number" [(ngModel)]="client.secondary_number" />
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="address">Address</label>
+    <input id="address" matInput type="text" class="form-control" name="address" [(ngModel)]="client.address" #address="ngModel"/>
+  </mat-form-field>
+</div>
+<div class="form-control-feedback"
+     *ngIf="address.errors && (address.dirty || address.touched)">
+  <p *ngIf="address.errors.required">Address is required</p>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="zipcode">Zipcode</label>
+    <input id="zipcode" matInput type="text" class="form-control" name="zipcode" [(ngModel)]="client.zipcode" required/>
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="city">City</label>
+    <input id="city" matInput type="text" class="form-control" name="city" [(ngModel)]="client.city" required #city="ngModel"/>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="city.errors && (city.dirty || city.touched)">
+    <p *ngIf="city.errors.required">City is required</p>
+  </div>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="company_name">Company Name</label>
+    <input id="company_name" matInput type="text" class="form-control" name="company_name" [(ngModel)]="client.company_name" />
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="vat">Vat</label>
+    <input id="vat" matInput type="text" class="form-control" name="vat" [(ngModel)]="client.vat" />
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="company_type">Company Type</label>
+    <input id="company_type" matInput type="text" class="form-control" name="company_type" [(ngModel)]="client.company_type" />
+  </mat-form-field>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <mat-select [(ngModel)]="client.user" placeholder="Check User" #userId="ngModel">
+      <mat-option *ngFor="let user of users" [value]="user.value">
+        {{ user.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="userId.errors && (userId.dirty || userId.touched)">
+    <p *ngIf="userId.errors.required">Primary number is required</p>
+  </div>
+</div>
+<div class="form-group">
+  <mat-form-field>
+    <label for="industryId">Industry</label>
+    <input id="industryId" matInput type="number" name="industry_id" [(ngModel)]="client.industry_id" required #industryId="ngModel"/>
+  </mat-form-field>
+  <div class="form-control-feedback"
+       *ngIf="industryId.errors && (industryId.dirty || industryId.touched)">
+    <p *ngIf="industryId.errors.required">Primary number is required</p>
+  </div>
+</div>
+<div class="form-group">
+  <button mat-button (click)="updateClient()">Добавити</button>
+</div>
+<div><h3>Added Elements</h3>
+  <ul *ngFor="let p of clients">
+    <li>{{p.name}} ({{p.email}}) - {{p.primary_number}}</li>
+  </ul>
+</div>

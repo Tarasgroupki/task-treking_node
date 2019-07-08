@@ -1,0 +1,78 @@
+<h1>
+    User information:
+</h1>
+<div *ngIf="LogginningData">
+    <img style="height:250px;width:250px;" src="http://task-treking/public/{{ user.image_path }}" />
+</div>
+roles: {{ role_list }}
+<h1>
+    Update your profile:
+</h1>
+<div class="form-group">
+    <mat-form-field>
+        <label for="name">Name</label>
+        <input id="name" matInput class="form-control" name="name" [(ngModel)]="user.name" required minlength="4" #name="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="name.errors && (name.dirty || name.touched)">
+        <p *ngIf="name.errors.required">Name is required</p>
+        <p *ngIf="name.errors.minlength">Name must have more than 4 symbols</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="email">Email</label>
+        <input id="email" matInput type="email" class="form-control" name="email" [(ngModel)]="user.email" required pattern="[^ @]*@[^ @]*" #email="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="email.errors && (email.dirty || email.touched)">
+        <p *ngIf="email.errors.required">Email is required</p>
+        <p *ngIf="email.errors.pattern">Email must contain at least the @ character</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="password">Password</label>
+        <input id="password" matInput type="password" class="form-control" name="password" [(ngModel)]="user.password" required minlength="8" #password="ngModel"/>
+    </mat-form-field>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="reset_password">Reset Password</label>
+        <input id="reset_password" matInput type="password" class="form-control" name="reset_password" [(ngModel)]="user.reset_password" required minlength="8" #reset_password="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="reset_password.errors && (reset_password.dirty || reset_password.touched)">
+        <p *ngIf="password.value !== reset_password.value">Reset Password field is another than password</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="address">Address</label>
+        <input id="address" matInput type="text" class="form-control" name="address" [(ngModel)]="user.address" #address="ngModel"/>
+    </mat-form-field>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="work_number">Work number</label>
+        <input id="work_number" matInput type="text" class="form-control" name="work_number" [(ngModel)]="user.work_number" #work_number="ngModel"/>
+    </mat-form-field>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="personal_number">Personal number</label>
+        <input id="personal_number" matInput type="text" class="form-control" name="personal_number" [(ngModel)]="user.personal_number" required/>
+    </mat-form-field>
+</div>
+<div class="form-group">
+    <label for="image_path">Image</label>
+    <input id="image_path"  type="file" (change)="onFileSelected($event)" class="form-control" name="image_path" required/>
+</div>
+<div class="form-group">
+    <button mat-button (click)="updateUser()">Добавити</button>
+</div>
+<div><h3>Added Elements</h3>
+    <ul *ngFor="let p of users">
+        <li>{{p.name}} ({{p.email}}) - {{p.work_number}}</li>
+    </ul>
+</div>

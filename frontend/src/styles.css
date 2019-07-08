@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+.mat-form-field-infix {
+    width:580px!important;
+}
+@media (max-width: 768px) {
+    width:700px!important;
+}

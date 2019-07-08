@@ -1,0 +1,48 @@
+<div>
+<mat-table #table [dataSource]="sprints">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"><a routerLink="/sprints/{{sprint._id}}" routerLinkActive="active"> {{sprint.title}} </a></mat-cell>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.description}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.status}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="lead_assigned">
+    <mat-header-cell *matHeaderCellDef> Assigned Lead </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.lead_assigned}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="user_created">
+    <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.user_created}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="deadline">
+    <mat-header-cell *matHeaderCellDef> Deadline </mat-header-cell>
+    <mat-cell *matCellDef="let sprint"> {{sprint.deadline}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="created_at">
+    <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+    <mat-cell *matCellDef="let sprint">
+      <a routerLink="/sprints/add/{{ sprint['_id'] }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+      <a routerLink="/sprints/delete/{{ sprint['_id'] }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+</div>

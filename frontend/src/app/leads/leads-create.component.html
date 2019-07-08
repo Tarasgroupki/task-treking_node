@@ -1,0 +1,77 @@
+<h1>
+    Create new Lead:
+</h1>
+<div class="form-group">
+    <mat-form-field>
+        <label for="title">Title</label>
+        <input id="title" matInput class="form-control" name="title" [(ngModel)]="lead.title" required minlength="4" #title="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="title.errors && (title.dirty || title.touched)">
+        <p *ngIf="title.errors.required">Title is required</p>
+        <p *ngIf="title.errors.minlength">Title must have more than 4 symbols</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="description">Description</label>
+        <textarea id="description" matInput type="text" class="form-control" name="description" [(ngModel)]="lead.description" required #description="ngModel"></textarea>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="description.errors && (description.dirty || description.touched)">
+        <p *ngIf="description.errors.required">Description is required</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <label for="status">Status</label>
+        <mat-select id="status" [(ngModel)]="lead.status" placeholder="Status" #status="ngModel">
+            <mat-option *ngFor="let status of statuses" [value]="status.value">
+                {{ status.viewValue }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="status.errors && (status.dirty || status.touched)">
+        <p *ngIf="status.errors.required">Primary number is required</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <mat-select [(ngModel)]="lead.user_assigned" placeholder="Check User" #user_assigned="ngModel">
+            <mat-option *ngFor="let user of users" [value]="user.value">
+                {{ user.viewValue }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="user_assigned.errors && (user_assigned.dirty || user_assigned.touched)">
+        <p *ngIf="user_assigned.errors.required">User assigned required</p>
+    </div>
+</div>
+<div class="form-group">
+    <input type="hidden" class="form-control" name="user_created" [(ngModel)]="lead.user_created" #user_created="ngModel"/>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <mat-select [(ngModel)]="lead.client" placeholder="Check Client" #client="ngModel">
+            <mat-option *ngFor="let client of clients" [value]="client.value">
+                {{ client.viewValue }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="client.errors && (client.dirty || client.touched)">
+        <p *ngIf="client.errors.required">Client required</p>
+    </div>
+</div>
+<div class="form-group">
+    <mat-form-field>
+        <input id="contact_date" name="contact_date" matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="lead.contact_date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</div>
+<div class="form-group">
+    <button mat-button (click)="addLead()">Добавити</button>
+</div>

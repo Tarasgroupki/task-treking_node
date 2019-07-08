@@ -1,0 +1,14 @@
+<h1>
+  Viewing Client:
+</h1>
+<mat-list role="list">
+  <mat-list-item role="listitem">ID: {{id}}</mat-list-item>
+  <mat-list-item role="listitem">Name: {{client['name']}}</mat-list-item>
+  <mat-list-item role="listitem">Email: {{client['email']}}</mat-list-item>
+  <mat-list-item role="listitem">Primary Number: {{client['primary_number']}}</mat-list-item>
+  <mat-list-item role="listitem">Secondary Number: {{client['secondary_number']}}</mat-list-item>
+  <mat-list-item role="listitem">Address: {{client['address']}}</mat-list-item>
+  <mat-list-item role="listitem">City: {{client['city']}}</mat-list-item>
+</mat-list>
+<a routerLink="/clients/add/{{ id }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+<a routerLink="/clients/delete/{{ id }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>

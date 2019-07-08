@@ -1,0 +1,26 @@
+<h1>
+    Create new User:
+</h1>
+<div class="form-group">
+    <mat-form-field>
+        <label for="name">Name</label>
+        <input id="name" matInput class="form-control" name="name" [(ngModel)]="role.name" required minlength="4" #name="ngModel"/>
+    </mat-form-field>
+    <div class="form-control-feedback"
+         *ngIf="name.errors && (name.dirty || name.touched)">
+        <p *ngIf="name.errors.required">Name is required</p>
+        <p *ngIf="name.errors.minlength">Name must have more than 4 symbols</p>
+    </div>
+</div>
+<div *ngIf="!checked_permissions">
+    <mat-checkbox *ngFor="let permission of permissions" name="permissions[]" [value]="permission['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
+</div>
+<div *ngIf="checked_permissions">
+    <div *ngFor="let permission of permissions">
+        <mat-checkbox  *ngIf="checked_permissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
+        <mat-checkbox  *ngIf="!checked_permissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
+    </div>
+</div>
+<div class="form-group">
+    <button mat-button (click)="updateRole()">Добавити</button>
+</div>

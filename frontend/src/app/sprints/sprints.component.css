@@ -1,0 +1,19 @@
+.show {
+    background-color: #17a2b8;
+    text-align: center;
+}
+.edit {
+    background-color: #007bff;
+    text-align: center;
+}
+.delete {
+    background-color: #dc3545;
+    text-align: center;
+}
+.view {
+    width: 300px;
+}
+.canvas {
+    margin-left:30%;
+    margin-top: -35%;
+}

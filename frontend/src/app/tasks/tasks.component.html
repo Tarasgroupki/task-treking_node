@@ -1,0 +1,52 @@
+<div>
+<mat-table #table [dataSource]="tasks">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let task"><a routerLink="/tasks/{{ task._id }}" routerLinkActive="active"> {{task.title}} </a></mat-cell>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.description}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.status}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="sprint_assigned">
+    <mat-header-cell *matHeaderCellDef> Assigned Sprint </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.sprint_assigned}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="user_created">
+    <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.user_created}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="invoice_id">
+    <mat-header-cell *matHeaderCellDef> Invoice </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.invoice_id}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="deadline">
+    <mat-header-cell *matHeaderCellDef> Deadline </mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.deadline}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="created_at">
+    <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+    <mat-cell *matCellDef="let task">
+      <a routerLink="/tasks/add/{{ task['_id'] }}" routerLinkActive="active"><button mat-button class="edit">{{ 'Редагувати' }}</button></a>
+      <a routerLink="/tasks/delete/{{ task['_id'] }}" routerLinkActive="active"><button mat-button class="delete">{{ 'Видалити' }}</button></a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+</div>
