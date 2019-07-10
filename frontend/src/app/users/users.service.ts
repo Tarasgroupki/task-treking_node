@@ -15,14 +15,20 @@ export class UsersService {
               'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       });
   }
-  getRoles(id: number){
-      return this._http.get('http://task-treking/public/api/users/add_roles/'+id+'',{
+  getRoles(){
+      return this._http.get('http://localhost:2700/settings/roles',{
+          headers: new HttpHeaders({'Accept': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('token'),})
+      }).map(result => result);
+  }
+  getCheckedRoles(id: number){
+      return this._http.get('http://localhost:2700/users/user/user_has_role/'+id+'',{
           headers: new HttpHeaders({'Accept': 'application/json',
               'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       }).map(result => result);
   }
   AssignRoles(id: number, arr: object){
-      return this._http.post('http://task-treking/public/api/users/assign/'+id+'', arr,{
+      return this._http.post('http://localhost:2700/users/user/user_has_role/'+id+'', arr,{
           headers: new HttpHeaders({'Accept': 'application/json',
               'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       }).map(result => result);

@@ -55,8 +55,6 @@ export class UsersProfileComponent implements OnInit {
             this.users.length = 0;
             console.log(res);
         });
-
-
     }
 
 }

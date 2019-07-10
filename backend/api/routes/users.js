@@ -8,6 +8,9 @@ const multer = require('multer');
 
 const User = require("../models/user");
 const User_has_role = require("../models/user_has_role");
+const Role = require("../models/role");
+const Role_has_permission = require("../models/role_has_permission");
+const Permission = require("../models/permission");
 const checkAuth = require('../middleware/check-auth');
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -40,13 +43,8 @@ router.get("/", checkAuth.main, (req, res, next) => {
         .exec()
         .then(docs => {
             console.log(docs);
-            //   if (docs.length >= 0) {
             res.status(200).json(docs);
-            //   } else {
-            //       res.status(404).json({
-            //           message: 'No entries found'
-            //       });
-            //   }
+
         })
         .catch(err => {
             console.log(err);
@@ -177,22 +175,40 @@ router.post("/login", (req, res, next) => {
                     });
                 }
                 if (result) {
-                    const token = jwt.sign(
-                        {
-                            email: user[0].email,
-                            userId: user[0]._id,
-                            scopes: "create-clients,edit-clients,create-tasks,edit-tasks"
-                        },
-                        "twa1kkEyjkhbybkju",
-                        {
-                            expiresIn: "10h"
+                    let count = -1;
+                    let permissions = [];
+                    return User_has_role.find({'user': user[0]._id}).exec().then(result => {console.log(result);
+                        for(let k = 0; k < result.length; k++) {
+                            Role_has_permission.find({"role": result[k]['role']}).exec().then(result => {console.log(result);
+                                for (let j = 0; j < result.length; j++) {count = result.length - 1;
+                                    Permission.find({"_id": result[j]['permission']}).exec().then(result => {console.log(k);console.log(j);
+                                            permissions.push(result[0]['name'].replace(" ","-"));
+                                        Permission.find({"_id": '5d1f7ab2fb3790231c4016b0'}).exec().then(result => {
+                                            if(count === j) {
+                                                let token = jwt.sign(
+                                                    {
+                                                        email: user[0].email,
+                                                        userId: user[0]._id,
+                                                        scopes: permissions.toString()
+                                                    },
+                                                    "twa1kkEyjkhbybkju",
+                                                    {
+                                                        expiresIn: "10h"
+                                                    }
+                                                );
+                                                res.status(200).json({
+                                                    message: "Auth successful",
+                                                    token: token,
+                                                    user: user,
+                                                    permissions: permissions
+                                                });
+                                            }
+                                        });
+
+                                    });
+                                }
+                            });
                         }
-                    );
-                    return res.status(200).json({
-                        message: "Auth successful",
-                        token: token,
-                        user: user,
-                        permissions:["create-clients","edit-clients","create-tasks","edit-tasks","create-sprints","edit-sprints","create-leads","edit-leads","create-roles","edit-roles","create-users","edit-users"]
                     });
                 }
                 res.status(401).json({
@@ -223,7 +239,7 @@ router.delete("/:userId", checkAuth.main, (req, res, next) => {
         });
 });
 
-router.get("/user_has_role", (req, res, next) => {
+router.get("/user/user_has_role", (req, res, next) => {
     User_has_role.find()
         .exec()
         .then(docs => {
@@ -238,7 +254,7 @@ router.get("/user_has_role", (req, res, next) => {
         });
 });
 
-router.get("/user_has_role/:userId", (req, res, next) => {
+router.get("/user/user_has_role/:userId", (req, res, next) => {
     const id = req.params.userId;
     let roles = {};
     User_has_role.find({user: id})
@@ -257,14 +273,26 @@ router.get("/user_has_role/:userId", (req, res, next) => {
         });
 });
 
-router.post("/user_has_role", (req, res, next) => {
-    for(let i = 0; i < req.body.length; i++){
+router.post("/user/user_has_role/:userId", (req, res, next) => {
+    const user_id = req.params.userId;
+    for(let i = 0; i < req.body[0].length; i++){
         let user_has_role = new User_has_role({
-            user: req.body[i][0],
-            role: req.body[i][1]
+            user: user_id,
+            role: req.body[0][i]
         });
         user_has_role
             .save()
+            .then(result => result)
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+    }
+    for(let i = 0; i < req.body[1].length; i++) {
+        User_has_role.remove({ role: req.body[1][i], user: user_id })
+            .exec()
             .then(result => result)
             .catch(err => {
                 console.log(err);
