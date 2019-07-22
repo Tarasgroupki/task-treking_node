@@ -24,11 +24,11 @@ export class UsersProfileComponent implements OnInit {
     ngOnInit() {
         console.log(this.LogginningData.user[0]['_id']);
         console.log(this.user);
-        //for ( let i = 0; i < this.LogginningData['user']['roles'].length;i++){
-         //   this.roles[i] = this.LogginningData['user']['roles'][i]['name'];
-       // }
-       // this.role_list = this.roles.join();
-      //  console.log(this.roles);
+        for ( let i = 0; i < this.LogginningData['roles'].length;i++){
+            this.roles[i] = this.LogginningData['roles'][i];
+        }
+        this.role_list = this.roles.join();
+        console.log(this.roles);
         this._user_obj.showUserProfile(this.LogginningData.user[0]['_id']).subscribe(res => {
             this.user = new User(res['name'], res['email'], res['password'], res['address'], res['work_number'], res['personal_number'], res['image_path']);
             console.log(this.user);
@@ -48,6 +48,7 @@ export class UsersProfileComponent implements OnInit {
             console.log(res);
         });
         this.filename = this.selectedFile.name;
+        console.log(this.filename);
       // this.LogginningData['user']['imgage_path'] = this.filename;
         }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));

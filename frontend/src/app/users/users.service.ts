@@ -10,7 +10,7 @@ export class UsersService {
   constructor(private _http: HttpClient) { }
 
   fileUpload(arr:object) {
-      return this._http.post('http://task-treking/public/api/fileUpload', arr, {
+      return this._http.post('http://localhost:2700/users/file/fileUpload', arr, {
           headers: new HttpHeaders({'Accept': 'application/json',
               'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       });

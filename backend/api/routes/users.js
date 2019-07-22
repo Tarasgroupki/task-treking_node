@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname);
+        cb(null, file.originalname);
     }
 });
 
@@ -33,7 +33,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 1024 * 1024 * 5
+        fileSize: 1024 * 1024 * 50
     },
     fileFilter: fileFilter
 });
@@ -119,7 +119,20 @@ router.get("/:userId", checkAuth.main, (req, res, next) => {
         });
 });
 
-router.patch("/profile/:userId", upload.single('productImage'), checkAuth.main, (req, res, next) => {
+router.post("/file/fileUpload", upload.single('image_path'), (req, res, next) => {console.log(res);
+console.log("</pre>");
+    console.log(req);
+    console.log("</pre>");
+    try {
+        const data = req.file;
+
+        res.send({fileName: data.filename, originalName: data.originalname });
+    } catch (err) {
+        res.sendStatus(400);
+    }
+});
+
+router.patch("/profile/:userId", checkAuth.main, upload.single('image_path'), (req, res, next) => {
     const id = req.params.userId;
     const updateOps = {};
     for (const ops of req.body) {
@@ -138,6 +151,7 @@ router.patch("/profile/:userId", upload.single('productImage'), checkAuth.main, 
             });
         });
 });
+
 
 router.patch("/:userId", checkAuth.main, (req, res, next) => {
     const id = req.params.userId;
@@ -177,14 +191,18 @@ router.post("/login", (req, res, next) => {
                 if (result) {
                     let count = -1;
                     let permissions = [];
+                    let changed_roles =[];
+                    let roles = [];
                     return User_has_role.find({'user': user[0]._id}).exec().then(result => {console.log(result);
                         for(let k = 0; k < result.length; k++) {
                             Role_has_permission.find({"role": result[k]['role']}).exec().then(result => {console.log(result);
+                            changed_roles[k] = result[k]['role'];
                                 for (let j = 0; j < result.length; j++) {count = result.length - 1;
                                     Permission.find({"_id": result[j]['permission']}).exec().then(result => {console.log(k);console.log(j);
                                             permissions.push(result[0]['name'].replace(" ","-"));
-                                        Permission.find({"_id": '5d1f7ab2fb3790231c4016b0'}).exec().then(result => {
+                                        Role.find({"_id": changed_roles[k]}).exec().then(result => {console.log(result[k].name);
                                             if(count === j) {
+                                                roles.push(result[k].name);
                                                 let token = jwt.sign(
                                                     {
                                                         email: user[0].email,
@@ -200,6 +218,7 @@ router.post("/login", (req, res, next) => {
                                                     message: "Auth successful",
                                                     token: token,
                                                     user: user,
+                                                    roles: roles,
                                                     permissions: permissions
                                                 });
                                             }
