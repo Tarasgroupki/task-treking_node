@@ -47,7 +47,7 @@ export class AuthComponent implements OnInit {
             }
             else {
                 localStorage.setItem('errMessage', 'true');
-               // this.authenticate.length = 0;
+                this.authenticate.length = 0;
                 this.errMessage = 'Неправильний логін, або пароль!';
                 window.location.reload();
             }

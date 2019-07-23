@@ -42,6 +42,9 @@ router.get("/", checkAuth.main, (req, res, next) => {
     User.find()
         .exec()
         .then(docs => {
+            for( key in docs ) {
+                docs[key].password = null;
+            }
             console.log(docs);
             res.status(200).json(docs);
 
@@ -104,6 +107,7 @@ router.get("/:userId", checkAuth.main, (req, res, next) => {
     User.findById(id)
         .exec()
         .then(doc => {
+            doc.password = null;
             console.log("From database", doc);
             if (doc) {
                 res.status(200).json(doc);
@@ -120,9 +124,6 @@ router.get("/:userId", checkAuth.main, (req, res, next) => {
 });
 
 router.post("/file/fileUpload", upload.single('image_path'), (req, res, next) => {console.log(res);
-console.log("</pre>");
-    console.log(req);
-    console.log("</pre>");
     try {
         const data = req.file;
 
@@ -138,6 +139,8 @@ router.patch("/profile/:userId", checkAuth.main, upload.single('image_path'), (r
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
+    (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : null;
+    (req.body[0].image_path === null) ? delete req.body[0].image_path : null;
     User.update({ _id: id }, { $set: req.body[0] })
         .exec()
         .then(result => {
@@ -153,12 +156,13 @@ router.patch("/profile/:userId", checkAuth.main, upload.single('image_path'), (r
 });
 
 
-router.patch("/:userId", checkAuth.main, (req, res, next) => {
+router.put("/:userId", checkAuth.main, (req, res, next) => {
     const id = req.params.userId;
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
+    (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : null;
     User.update({ _id: id }, { $set: req.body[0] })
         .exec()
         .then(result => {

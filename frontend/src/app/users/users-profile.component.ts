@@ -48,13 +48,11 @@ export class UsersProfileComponent implements OnInit {
             console.log(res);
         });
         this.filename = this.selectedFile.name;
-        console.log(this.filename);
-      // this.LogginningData['user']['imgage_path'] = this.filename;
         }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));
-        this._user_obj.updateProfileUser(this.LogginningData.user[0]['_id'], this.users).subscribe(res => { this.user.image_path = res['image_path'];
+        console.log(this.user);
+        this._user_obj.updateProfileUser(this.LogginningData.user[0]['_id'], this.users).subscribe(res => { (this.filename !== null) ? this.user.image_path = this.filename : null;
             this.users.length = 0;
-            console.log(res);
         });
     }
 
