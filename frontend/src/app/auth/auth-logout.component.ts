@@ -13,13 +13,13 @@ export class AuthLogoutsComponent {
     //auth: object;
 
     constructor(private _auth: AuthService, private route: ActivatedRoute, private router: Router) {
-        this.route.params.subscribe( params => this._auth.logoutAuth(params['id']).subscribe(res => {
-            //this.auth = res['data'];
-            localStorage.removeItem('token');
-            localStorage.removeItem('LoggedIn');
-            //  console.log(res);
-            this.router.navigate(['login']);
-        }) );
+        localStorage.removeItem('token');
+        localStorage.removeItem('LoggedIn');
+        //sessionStorage.removeItem('token');
+        this.router.navigate(['login']);
+        //this.route.params.subscribe( params => this._auth.logoutAuth(params['id']).subscribe(res => {
+
+      //  }) );
     }
 
 

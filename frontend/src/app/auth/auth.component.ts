@@ -34,10 +34,10 @@ export class AuthComponent implements OnInit {
     }
     getAuth() {
         this.authenticate.push(new Auth(this.auth.email, this.auth.password));
-        //console.log(this.authenticate);
+        console.log(this.authenticate);
         this._auth.getAuth(this.authenticate).subscribe(res => {
                 this.auth = res;
-               // console.log(typeof this.auth);
+                console.log(this.auth);
             if (this.auth) {
                 localStorage.setItem('LoggedIn', JSON.stringify(this.auth));
                 localStorage.setItem('token', this.auth['token']);

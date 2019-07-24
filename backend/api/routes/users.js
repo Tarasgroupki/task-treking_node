@@ -39,22 +39,24 @@ const upload = multer({
 });
 
 router.get("/", checkAuth.main, (req, res, next) => {
-    User.find()
-        .exec()
-        .then(docs => {
-            for( key in docs ) {
-                docs[key].password = null;
-            }
-            console.log(docs);
-            res.status(200).json(docs);
+    if(checkAuth.scopes("create-users,edit-users")) {
+        User.find()
+            .exec()
+            .then(docs => {
+                for (key in docs) {
+                    docs[key].password = null;
+                }
+                console.log(docs);
+                res.status(200).json(docs);
 
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        });
+    }
 });
 
 router.post("/", checkAuth.main, (req, res, next) => {
@@ -103,24 +105,26 @@ router.post("/", checkAuth.main, (req, res, next) => {
 });
 
 router.get("/:userId", checkAuth.main, (req, res, next) => {
-    const id = req.params.userId;
-    User.findById(id)
-        .exec()
-        .then(doc => {
-            doc.password = null;
-            console.log("From database", doc);
-            if (doc) {
-                res.status(200).json(doc);
-            } else {
-                res
-                    .status(404)
-                    .json({ message: "No valid entry found for provided ID" });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        });
+    if(checkAuth.scope("edit-users")) {
+        const id = req.params.userId;
+        User.findById(id)
+            .exec()
+            .then(doc => {
+                doc.password = null;
+                console.log("From database", doc);
+                if (doc) {
+                    res.status(200).json(doc);
+                } else {
+                    res
+                        .status(404)
+                        .json({message: "No valid entry found for provided ID"});
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({error: err});
+            });
+    }
 });
 
 router.post("/file/fileUpload", upload.single('image_path'), (req, res, next) => {console.log(res);
@@ -139,7 +143,7 @@ router.patch("/profile/:userId", checkAuth.main, upload.single('image_path'), (r
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
-    (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : null;
+    (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : delete req.body[0].password;
     (req.body[0].image_path === null) ? delete req.body[0].image_path : null;
     User.update({ _id: id }, { $set: req.body[0] })
         .exec()
@@ -158,23 +162,25 @@ router.patch("/profile/:userId", checkAuth.main, upload.single('image_path'), (r
 
 router.put("/:userId", checkAuth.main, (req, res, next) => {
     const id = req.params.userId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : null;
-    User.update({ _id: id }, { $set: req.body[0] })
-        .exec()
-        .then(result => {
-            console.log(result);
-            res.status(200).json(result);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+    if(checkAuth.scope("edit-users")) {
+        const updateOps = {};
+        for (const ops of req.body) {
+            updateOps[ops.propName] = ops.value;
+        }
+        (req.body[0].password !== null) ? req.body[0].password = bcrypt.hashSync(req.body[0].password, 12) : delete req.body[0].password;
+        User.update({_id: id}, {$set: req.body[0]})
+            .exec()
+            .then(result => {
+                console.log(result);
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        });
+    }
 });
 
 router.post("/login", (req, res, next) => {
@@ -249,17 +255,19 @@ router.post("/login", (req, res, next) => {
 
 router.delete("/:userId", checkAuth.main, (req, res, next) => {
     const id = req.params.userId;
-    User.remove({ _id: id })
-        .exec()
-        .then(result => {
-            res.status(200).json(result);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+    if(checkAuth.scope("delete-users")) {
+        User.remove({_id: id})
+            .exec()
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        });
+    }
 });
 
 router.get("/user/user_has_role", (req, res, next) => {

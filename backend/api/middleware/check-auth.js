@@ -43,8 +43,8 @@ module.exports = {
                 const decoded = jwt_decode(token);
                 decoded_scopes = decoded['scopes'].split(",");
                 scopes = scopes.split(",");
-                console.log(decoded_scopes);
-                console.log(scopes);
+               // console.log(decoded_scopes);
+               // console.log(scopes);
                 let count = 0;
                 for(let i = 0; i < scopes.length; i++) {
                  if (decoded_scopes.indexOf(scopes[i]) !== -1){count+=1; if(count === scopes.length){next();}}
