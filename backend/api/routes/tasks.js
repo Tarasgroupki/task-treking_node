@@ -13,6 +13,14 @@ router.get("/:taskId", checkAuth.main, TasksController.tasks_get_one);
 
 router.patch("/:sprintId", checkAuth.main, TasksController.tasks_edit_task);
 
+router.get("/vote_count/:taskId", TasksController.tasks_votes_count);
+
+router.get("/voter_count/:voteId", TasksController.tasks_check_voter);
+
+router.post("/vote_create", TasksController.tasks_create_votes);
+
+router.put("/vote_update/:taskId", TasksController.tasks_update_votes);
+
 router.delete("/:sprintId", checkAuth.main, TasksController.tasks_delete_task);
 
 module.exports = router;

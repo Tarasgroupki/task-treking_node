@@ -21,9 +21,6 @@ export class TasksService {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       }).map(result => result);
   }
-  getInvoices(){
-      return this._http.get('http://task-treking/public/api/invoices').map(result => result);
-  }
   getTasks(){
       return this._http.get('http://localhost:2700/tasks', {
           headers: new HttpHeaders({'Accept': 'application/json',
@@ -59,25 +56,25 @@ export class TasksService {
       }).map(result => result);
     }
     createVote(arr: object){
-        return this._http.post('http://task-treking/public/api/votes', arr, {
+        return this._http.post('http://localhost:2700/tasks/vote_create', arr, {
             headers: new HttpHeaders({'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),})
         }).map(result => result);
     }
-    checkVote(id: number){
-        return this._http.get('http://task-treking/public/api/vote_count/'+id+'', {
+    checkVote(id: string){
+        return this._http.get('http://localhost:2700/tasks/vote_count/'+id+'', {
             headers: new HttpHeaders({'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),})
         }).map(result => result);
     }
     checkVoter(id: string){
-        return this._http.get('http://task-treking/public/api/vote_counter/'+id+'', {
+        return this._http.get('http://localhost:2700/tasks/voter_count/'+id+'', {
             headers: new HttpHeaders({'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),})
         }).map(result => result);
     }
     updateVote(id: number,arr: object){
-        return this._http.put('http://task-treking/public/api/votes/'+id+'', arr, {
+        return this._http.put('http://localhost:2700/tasks/vote_update/'+id+'', arr, {
             headers: new HttpHeaders({'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),})
         }).map(result => result);

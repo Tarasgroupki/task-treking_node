@@ -1,6 +1,6 @@
 export class Votes {
-    constructor(public user_added_id: number,
-                public task_assigned_id: number,
+    constructor(public user_added: string,
+                public task_assigned: string,
                 public mark: number
     )
     { }
