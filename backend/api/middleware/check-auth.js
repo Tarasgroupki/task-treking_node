@@ -28,8 +28,8 @@ module.exports = {
             const decoded = jwt_decode(token);
             decoded_scopes = decoded['scopes'].split(",");
             scope = scope.split(",");
-            console.log(decoded_scopes);
-            console.log(scope);
+         //   console.log(decoded_scopes);
+           // console.log(scope);
                 if (decoded_scopes.indexOf(scope[0]) !== -1) next();
                 else return res.status(401).json({
                     message: 'Auth failed'
