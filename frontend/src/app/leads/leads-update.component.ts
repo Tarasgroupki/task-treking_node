@@ -61,7 +61,8 @@ export class LeadsUpdateComponent implements OnInit {
 
     updateLead() {
         this.leads.push(new Lead(this.lead.title, this.lead.description, this.lead.status, this.lead.user_assigned, this.lead.client, this.lead.user_created, this.lead.contact_date));
-       // console.log(this.clients[0]['name']);
+       console.log(this.leads[0]);
+        // console.log(this.clients[0]['name']);
        // this.selected = this.client.user_id;
         this._lead_obj.updateLead(this.id, this.leads).subscribe(res => {
             this.leads.length = 0;

@@ -34,7 +34,8 @@ exports.leads_create_lead = (req, res, next) => {
         user_assigned: req.body[0].user_assigned,
         client: req.body[0].client,
         user_created: req.body[0].user_created,
-        contact_date: req.body[0].contact_date
+        contact_date: req.body[0].contact_date,
+        created_at: new Date(Date.now()).toISOString()
     });
     if(checkAuth.scope("create-leads")) {
         lead
@@ -84,7 +85,7 @@ exports.leads_edit_lead = (req, res, next) => {
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
         }
-        Client.update({_id: id}, {$set: req.body[0]})
+        Lead.update({_id: id}, {$set: req.body[0]})
             .exec()
             .then(result => {
                 console.log(result);

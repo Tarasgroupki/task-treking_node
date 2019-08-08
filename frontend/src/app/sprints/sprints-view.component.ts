@@ -18,7 +18,7 @@ export class SprintsViewComponent {
     // _clientsArray: ClientsInterface[];
     //sprint: object;
     chart = [];
-    id: number;
+    id: string;
 
     constructor(private _sprint: SprintsService, private route: ActivatedRoute) {
         this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(res => {
@@ -27,21 +27,21 @@ export class SprintsViewComponent {
            this.id = params['id'];
            this._sprint.dailyForecast(this.id)
                 .subscribe(res => {
-
-                    let arr = JSON.parse(res['data'])
+console.log(res);
+                   // let arr = JSON.parse(res);
                    // console.log(arr);
                     //console.log(JSON.stringify(Object.values(arr.mark)));
-                    let temp_max = Object.values(arr.mark)
-                    let temp_min = arr.ideal_line
-                    let alldates = arr.date
+                    let temp_max = Object.values(res[0]);
+                    let temp_min = res[2];
+                    let alldates = res[1];
 
-                    let weatherDates = []
+                    let weatherDates = [];
                     alldates.forEach((res) => {
                         let jsdate = res;
                         //let jsdate = new Date(res * 1000)
                        // weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric'}))
                        weatherDates.push(jsdate);
-                    })
+                    });
 
                     this.chart = new Chart('canvas', {
                         type: 'line',

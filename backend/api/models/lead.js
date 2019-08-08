@@ -11,7 +11,8 @@ const leadSchema = mongoose.Schema({
     user_assigned: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
     client: {type: mongoose.Schema.Types.ObjectId, ref:'Client'},
     user_created: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-    contact_date: String
+    contact_date: String,
+    created_at: String
 });
 
 //mongoose.model('User', userSchema);

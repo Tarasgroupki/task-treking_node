@@ -34,7 +34,8 @@ exports.tasks_create_task = (req, res, next) => {
         status: req.body[0].status,
         sprint_assigned: req.body[0].sprint_assigned,
         user_created: req.body[0].user_created,
-        deadline: req.body[0].deadline
+        deadline: req.body[0].deadline,
+        created_at: new Date(Date.now()).toISOString()
     });
     if(checkAuth.scope("create-tasks")) {
         task
@@ -84,6 +85,7 @@ exports.tasks_edit_task = (req, res, next) => {
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
         }
+       // req.body[0]['created_at'] = new Date(Date.now()).toISOString();
         Task.update({_id: id}, {$set: req.body[0]})
             .exec()
             .then(result => {

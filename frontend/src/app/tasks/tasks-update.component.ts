@@ -60,11 +60,11 @@ export class TasksUpdateComponent implements OnInit {
     updateTask() {
        // this.task.deadline = Date.parse(this.task.deadline);
         this.tasks.push(new Task(this.task.title, this.task.description, this.task.status, this.task.sprint_assigned, this.task.user_created, this.task.deadline));
-        console.log(this.tasks[0]['deadline']);
+        console.log(this.tasks[0]);
        // this.selected = this.client.user_id;
         this._task_obj.updateTask(this.id, this.tasks).subscribe(res => {
+            console.log(res);
             this.tasks.length = 0;
-        console.log(res);
     });
 
 

@@ -10,7 +10,8 @@ const taskSchema = mongoose.Schema({
     status: Number,
     sprint_assigned: {type: mongoose.Schema.Types.ObjectId, ref:'Sprint'},
     user_created: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-    deadline: String
+    deadline: String,
+    created_at: String
 });
 
 //mongoose.model('Lead', leadSchema);

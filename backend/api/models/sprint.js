@@ -10,7 +10,8 @@ const sprintSchema = mongoose.Schema({
     status: Number,
     lead_assigned: {type: mongoose.Schema.Types.ObjectId, ref:'Lead'},
     user_created: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-    deadline: String
+    deadline: String,
+    created_at: String
 });
 
 //mongoose.model('Lead', leadSchema);

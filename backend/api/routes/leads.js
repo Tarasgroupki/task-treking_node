@@ -11,7 +11,7 @@ router.post("/", checkAuth.main, LeadsController.leads_create_lead);
 
 router.get("/:leadId", checkAuth.main, LeadsController.leads_get_one);
 
-router.patch("/:leadId", checkAuth.main, LeadsController.leads_edit_lead);
+router.put("/:leadId", checkAuth.main, LeadsController.leads_edit_lead);
 
 router.delete("/:leadId", checkAuth.main, LeadsController.leads_delete_lead);
 

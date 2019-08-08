@@ -9,6 +9,8 @@ router.get("/", checkAuth.main, SprintsController.sprints_get_all);
 
 router.post("/", checkAuth.main, SprintsController.sprints_create_sprint);
 
+router.get("/get_points/:sprintId", SprintsController.sprints_get_points);
+
 router.get("/:sprintId", checkAuth.main, SprintsController.sprints_get_one);
 
 router.patch("/:sprintId", checkAuth.main, SprintsController.sprints_edit_sprint);

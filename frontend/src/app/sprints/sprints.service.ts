@@ -58,8 +58,8 @@ export class SprintsService {
               'Authorization': 'Bearer ' + localStorage.getItem('token'),})
       }).map(result => result);
     }
-    dailyForecast(id:number) {
-        return this._http.get('http://task-treking/public/api/pointses/'+id+'')
+    dailyForecast(id:string) {
+        return this._http.get('http://localhost:2700/sprints/get_points/'+id+'')
             .map(result => result);
     }
     getUserById(id: number) {
