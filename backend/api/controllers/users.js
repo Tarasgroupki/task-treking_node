@@ -8,25 +8,41 @@ const Role = require("../models/role");
 const Role_has_permission = require("../models/role_has_permission");
 const Permission = require("../models/permission");
 const checkAuth = require('../middleware/check-auth');
+let redis = require('redis');
+let client_red = redis.createClient(6379, '127.0.0.1');
 
 exports.users_get_all = (req, res, next) => {
     if(checkAuth.scopes("create-users,edit-users")) {
-        User.find()
-            .exec()
-            .then(docs => {
-                for (key in docs) {
-                    docs[key].password = null;
+        client_red.get('allusers', function (err, reply) {
+            if (reply) {
+                console.log('redis');
+                reply = JSON.parse(reply);
+                for (key in reply) {
+                    console.log(key);
+                    reply[key].password = null;
                 }
-                console.log(docs);
-                res.status(200).json(docs);
+                reply = JSON.stringify(reply);
+                res.send(reply);
+            } else {
+                console.log('db');
+                User.find()
+                    .exec()
+                    .then(docs => {
+                        client_red.set('allusers', JSON.stringify(docs));
+                        for (key in docs) {
+                            docs[key].password = null;
+                        }
+                        console.log(docs);
+                        res.status(200).json(docs);
 
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({
-                    error: err
-                });
-            });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
+            }});
     }
 };
 
@@ -58,6 +74,7 @@ exports.users_create_user = (req, res, next) => {
                         user
                             .save()
                             .then(result => {
+                                client_red.del('allusers');
                                 console.log(result);
                                 res.status(201).json({
                                     message: "User created"
@@ -293,6 +310,7 @@ exports.users_delete_user = (req, res, next) => {
         User.remove({_id: id})
             .exec()
             .then(result => {
+                client_red.del('allusers');
                 res.status(200).json(result);
             })
             .catch(err => {

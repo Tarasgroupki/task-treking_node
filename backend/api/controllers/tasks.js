@@ -3,27 +3,37 @@ const mongoose = require("mongoose");
 const Task = require("../models/task");
 const Vote = require("../models/vote");
 const checkAuth = require('../middleware/check-auth');
+let redis = require('redis');
+let client_red = redis.createClient(6379, '127.0.0.1');
 
 exports.tasks_get_all = (req, res, next) => {
     if(checkAuth.scopes("create-tasks,edit-tasks")) {
-        Task.find()
-            .exec()
-            .then(docs => {
-                console.log(docs);
-                //   if (docs.length >= 0) {
-                res.status(200).json(docs);
-                //   } else {
-                //       res.status(404).json({
-                //           message: 'No entries found'
-                //       });
-                //   }
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({
-                    error: err
-                });
-            });
+        client_red.get('alltasks', function (err, reply) {
+            if (reply) {
+                console.log('redis');
+                res.send(reply)
+            } else {
+                console.log('db');
+                Task.find()
+                    .exec()
+                    .then(docs => {
+                        client_red.set('alltasks', JSON.stringify(docs));
+                        console.log(docs);
+                        //   if (docs.length >= 0) {
+                        res.status(200).json(docs);
+                        //   } else {
+                        //       res.status(404).json({
+                        //           message: 'No entries found'
+                        //       });
+                        //   }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
+            }});
     } };
 
 exports.tasks_create_task = (req, res, next) => {
@@ -41,6 +51,7 @@ exports.tasks_create_task = (req, res, next) => {
         task
             .save()
             .then(result => {
+                client_red.del('alltasks');
                 console.log(result);
                 res.status(201).json({
                     message: "Handling POST requests to /tasks",
@@ -200,6 +211,7 @@ exports.tasks_delete_task = (req, res, next) => {
         Task.remove({_id: id})
             .exec()
             .then(result => {
+                client_red.del('alltasks');
                 res.status(200).json(result);
             })
             .catch(err => {

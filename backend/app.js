@@ -3,6 +3,11 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+/*const RedisServer = require('redis-server');
+const server = new RedisServer({
+  port: 6379,
+  bin: '/usr/local/bin/redis-server'
+});*/
 
 const productRoutes = require("./api/routes/products");
 const clientRoutes = require("./api/routes/clients");
@@ -21,6 +26,13 @@ mongoose.connect(
     useMongoClient: true
   }
 );
+
+/*server.open((err) => {
+  if (err === null) {
+    // You may now connect a client to the Redis
+    // server bound to port 6379.
+  }
+});*/
 
 app.use(morgan("dev"));
 app.use('/uploads', express.static('uploads'));
