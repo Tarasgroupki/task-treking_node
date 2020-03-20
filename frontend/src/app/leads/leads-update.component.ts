@@ -15,8 +15,8 @@ export class LeadsUpdateComponent implements OnInit {
     lead: any = new Lead('', '', 1, '', '', '', '');
     leads: Lead[] = [];
     date: any;
-    user: any = new Users('','');
-    client: any = new Client('','');
+    user: any = new Users('', '');
+    client: any = new Client('', '');
     users = [];
     clients = [];
     statuses = [
@@ -24,7 +24,7 @@ export class LeadsUpdateComponent implements OnInit {
         {value: 2, viewValue: 'Виконано'},
         {value: 3, viewValue: 'Не виконується'}
     ];
-    selected: string;
+  //  selected: string;
 
 
     constructor(public _lead_obj: LeadsService, private route: ActivatedRoute) {
@@ -33,7 +33,6 @@ export class LeadsUpdateComponent implements OnInit {
     ngOnInit() {
     this.route.params.subscribe( params => this._lead_obj.showLead(params['id']).subscribe(res => {
         this.date = new Date(res['contact_date']);
-      //  dateformat(this.date, 'DD.MM.YYYY');
         console.log(this.date);
     this.lead = new Lead(res['title'], res['description'], res['status'], res['user_assigned'], res['client'], res['user_created'], this.date);
     this.id = params['id'];
@@ -43,16 +42,13 @@ export class LeadsUpdateComponent implements OnInit {
              this.users.push(this.user);
              console.log(this.users);
          }
-         //this.selected = this.users[0].value;
      });
       this._lead_obj.getClients().subscribe(res => {
           for (let i = 0; i < Object.keys(res).length; i++) {
               this.client = new Client(res[i]._id, res[i].name);
               this.clients.push(this.client);
           }
-          //this.selected = this.clients[0].value;
       });
-     //this.selected = res['data']['user_id'];
 
      console.log(this.lead.contact_date);
 }));

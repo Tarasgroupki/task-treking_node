@@ -10,24 +10,24 @@ import { Chart } from 'chart.js';
 export class GraphComponent {
 
   chart = [];
-  
+
   constructor(private _weather: GraphService) {}
 
   ngOnInit() {
     this._weather.dailyForecast()
       .subscribe(res => {
 
-  let arr = JSON.parse(res['data'])
+  const arr = JSON.parse(res['data']);
 
-        let temp_max = arr.list
-        let temp_min = [0, 2, 4, 6]
-        let alldates = arr.date
+        const temp_max = arr.list;
+        const temp_min = [0, 2, 4, 6];
+        const alldates = arr.date;
 
-        let weatherDates = []
+        const weatherDates = [];
         alldates.forEach((res) => {
-          let jsdate = new Date(res * 1000)
-          weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric'}))
-        })
+          const jsdate = new Date(res * 1000);
+          weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric'}));
+        });
 
         this.chart = new Chart('canvas', {
           type: 'line',
@@ -59,8 +59,8 @@ export class GraphComponent {
               }]
             }
           }
-        })
+        });
 
-      })
+      });
   }
 }

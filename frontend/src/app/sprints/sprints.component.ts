@@ -16,14 +16,12 @@ export class SprintsComponent implements OnInit {
     ngOnInit() {
         this._sprints.getSprints().subscribe(res => {
             this.sprints = res;
-            for(let i in this.sprints){
-                if(this.sprints[i].status == 2) {
+            for (const i of Object.keys(this.sprints)) {
+                if (this.sprints[i].status === 2) {
                     this.sprints[i].status = 'Виконано';
-                }
-                else if(this.sprints[i].status == 1) {
+                } else if (this.sprints[i].status === 1) {
                     this.sprints[i].status = 'Виконується';
-                }
-                else {
+                } else {
                     this.sprints[i].status = 'Не виконується';
                 }
                 this._sprints.getUserById(this.sprints[i].user_created).subscribe( res => {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TasksService } from './tasks.service';
-import { ActivatedRoute,RouterModule, Router } from "@angular/router";
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -12,10 +12,10 @@ export class TasksDeleteComponent {
     title = 'app';
     task: object;
 
-    constructor(private _task: TasksService, private route: ActivatedRoute,private router: Router) {
+    constructor(private _task: TasksService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe( params => this._task.deleteTask(params['id']).subscribe(res => {
             this.task = res;
-            this.router.navigate(['tasks'])
+            this.router.navigate(['tasks']);
             //  console.log(res);
         }) );
     }

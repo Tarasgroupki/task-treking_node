@@ -17,24 +17,19 @@ export class AppComponent implements OnInit {
       console.log(this.LogginningData);
        _router.events.subscribe((url: any) => {
          this.route = url['url'];
-         if(this.route == '/') {
+         if (this.route === '/') {
              this._router.navigate(['profile']);
          }
-       //  console.log(this.route);
        });
-       //console.log(this._router.url);
   }
 
   ngOnInit() {
-      //localStorage.removeItem('token');
-      //localStorage.removeItem('LoggedIn');
-      if(!localStorage.getItem('LoggedIn')){
+      if (!localStorage.getItem('LoggedIn')) {
           this._router.navigate(['login']);
       }
 
     }
     removeAuth() {
-       // console.log(JSON.parse(localStorage.getItem('LoggedIn')));
         localStorage.removeItem('token');
         localStorage.removeItem('LoggedIn');
     }

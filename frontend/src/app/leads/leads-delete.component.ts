@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LeadsService } from './leads.service';
-import { ActivatedRoute,RouterModule, Router } from "@angular/router";
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -12,10 +12,10 @@ export class LeadsDeleteComponent {
     title = 'app';
     lead: object;
 
-    constructor(private _lead: LeadsService, private route: ActivatedRoute,private router: Router) {
+    constructor(private _lead: LeadsService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe( params => this._lead.deleteLead(params['id']).subscribe(res => {
             this.lead = res;
-            this.router.navigate(['leads'])
+            this.router.navigate(['leads']);
             //  console.log(res);
         }) );
     }

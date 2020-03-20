@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: .Dockerfile
+    ports:
+      - "8010:2700"
+    volumes:
+      - ./:/app
+    links:
+      - db
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./:/var/lib/mysql/*
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 5010:8080

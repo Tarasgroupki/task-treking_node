@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges ,SimpleChange } from '@angular/core';
+import { Component, OnInit, OnChanges , SimpleChange } from '@angular/core';
 import { TasksService } from './tasks.service';
 import { ActivatedRoute } from '@angular/router';
 import { Task } from './tasks.model';
@@ -20,13 +20,13 @@ export class TasksUpdateComponent implements OnInit {
         {value: 2, viewValue: 'Виконано'},
         {value: 3, viewValue: 'Не виконується'}
     ];
-    user: any = new Users('','');
+    user: any = new Users('', '');
     users = [];
-    sprint: any = new Users('','');
+    sprint: any = new Users('', '');
     sprints = [];
    selected: number;
 
-    constructor(public _task_obj: TasksService,private route: ActivatedRoute) {
+    constructor(public _task_obj: TasksService, private route: ActivatedRoute) {
 
     }
     ngOnInit() {
@@ -36,10 +36,8 @@ export class TasksUpdateComponent implements OnInit {
     this.id = params['id'];
      this._task_obj.getUsers().subscribe(res => {
          for (let i = 0; i < Object.keys(res).length; i++) {
-             console.log(this.id);
              this.user = new Users(res[i]._id, res[i].name);
              this.users.push(this.user);
-             console.log(this.users);
          }
      });
      this._task_obj.getSprints().subscribe(res => {
@@ -50,20 +48,13 @@ export class TasksUpdateComponent implements OnInit {
              console.log(this.sprints);
          }
      });
-    // this.selected = res['data']['user_assigned_id'];
-    // document.getElementById("deadline").value = "2014/02/09";
     console.log(this.selected);
 }));
 }
 
-
     updateTask() {
-       // this.task.deadline = Date.parse(this.task.deadline);
         this.tasks.push(new Task(this.task.title, this.task.description, this.task.status, this.task.sprint_assigned, this.task.user_created, this.task.deadline));
-        console.log(this.tasks[0]);
-       // this.selected = this.client.user_id;
         this._task_obj.updateTask(this.id, this.tasks).subscribe(res => {
-            console.log(res);
             this.tasks.length = 0;
     });
 

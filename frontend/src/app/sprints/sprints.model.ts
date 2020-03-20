@@ -1,4 +1,4 @@
-export class Sprint{
+export class Sprint {
     constructor(public title: string,
                 public description: string,
                 public status: number,
@@ -7,6 +7,5 @@ export class Sprint{
              //   public client_id: number,
                // public invoice_id: number,
                 public deadline: string
-    )
-    { }
+    ) { }
 }
