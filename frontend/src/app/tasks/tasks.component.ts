@@ -16,14 +16,12 @@ export class TasksComponent implements OnInit {
     ngOnInit() {
         this._tasks.getTasks().subscribe(res => {
             this.tasks = res;
-            for(let i in this.tasks){
-              if(this.tasks[i].status == 2) {
+            for (const i of Object.keys(this.tasks)) {
+              if (this.tasks[i].status === 2) {
                  this.tasks[i].status = 'Виконано';
-              }
-              else if(this.tasks[i].status == 1) {
+              } else if (this.tasks[i].status === 1) {
                   this.tasks[i].status = 'Виконується';
-              }
-              else {
+              } else {
                   this.tasks[i].status = 'Не виконується';
               }
               this._tasks.getUserById(this.tasks[i].user_created).subscribe( res => {

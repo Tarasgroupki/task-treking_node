@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SprintsService } from './sprints.service';
-import { ActivatedRoute } from "@angular/router";
-import {GraphService} from '../graph/graph.service';
+import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'chart.js';
 import { Sprint } from './sprints.model';
 
@@ -13,33 +12,22 @@ import { Sprint } from './sprints.model';
 export class SprintsViewComponent {
     title = 'app';
     sprint: any = new Sprint('', '', 1, '', '', '');
-   // tasks: Task[] = [];
-  //  id: number;
-    // _clientsArray: ClientsInterface[];
-    //sprint: object;
     chart = [];
     id: string;
 
     constructor(private _sprint: SprintsService, private route: ActivatedRoute) {
         this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(res => {
             this.sprint = new Sprint(res['title'], res['description'], res['status'], res['lead_assigned'], res['user_created'], res['deadline']);
-          // this.sprint = res['data'];
            this.id = params['id'];
            this._sprint.dailyForecast(this.id)
                 .subscribe(res => {
-console.log(res);
-                   // let arr = JSON.parse(res);
-                   // console.log(arr);
-                    //console.log(JSON.stringify(Object.values(arr.mark)));
-                    let temp_max = Object.values(res[0]);
-                    let temp_min = res[2];
-                    let alldates = res[1];
+                    const temp_max = Object.values(res[0]);
+                    const temp_min = res[2];
+                    const alldates = res[1];
 
-                    let weatherDates = [];
+                    const weatherDates = [];
                     alldates.forEach((res) => {
-                        let jsdate = res;
-                        //let jsdate = new Date(res * 1000)
-                       // weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric'}))
+                        const jsdate = res;
                        weatherDates.push(jsdate);
                     });
 
@@ -73,20 +61,9 @@ console.log(res);
                                 }]
                             }
                         }
-                    })
+                    });
 
-                })
-             // console.log(this.id);
+                });
         }) );
     }
-
-  //  ngOnInit() {
-
-   // }
-    /*ngOnInit() {
-        this._clients.getClients().subscribe(res => {
-            this.clients = res;
-        });
-    }*/
-
 }

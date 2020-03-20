@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges ,SimpleChange } from '@angular/core';
+import { Component, OnInit, OnChanges , SimpleChange } from '@angular/core';
 import { UsersService } from './users.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from './users.model';
@@ -22,13 +22,10 @@ export class UsersProfileComponent implements OnInit {
 
     }
     ngOnInit() {
-        console.log(this.LogginningData.user[0]['_id']);
-        console.log(this.user);
-        for ( let i = 0; i < this.LogginningData['roles'].length;i++){
+        for ( let i = 0; i < this.LogginningData['roles'].length; i++) {
             this.roles[i] = this.LogginningData['roles'][i];
         }
         this.role_list = this.roles.join();
-        console.log(this.roles);
         this._user_obj.showUserProfile(this.LogginningData.user[0]['_id']).subscribe(res => {
             this.user = new User(res['name'], res['email'], res['password'], res['address'], res['work_number'], res['personal_number'], res['image_path']);
             console.log(this.user);
@@ -37,11 +34,10 @@ export class UsersProfileComponent implements OnInit {
 
     onFileSelected(event) {
         this.selectedFile = <File>event.target.files[0];
-        console.log(this.selectedFile);
     }
 
     updateUser() {
-        if (this.selectedFile != null) {
+        if (this.selectedFile !== null) {
             const fd = new FormData();
             fd.append('image_path', this.selectedFile, this.selectedFile.name);
         this._user_obj.fileUpload(fd).subscribe(res => {
@@ -50,7 +46,6 @@ export class UsersProfileComponent implements OnInit {
         this.filename = this.selectedFile.name;
         }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));
-        console.log(this.user);
         this._user_obj.updateProfileUser(this.LogginningData.user[0]['_id'], this.users).subscribe(res => { (this.filename !== null) ? this.user.image_path = this.filename : null;
             this.users.length = 0;
         });

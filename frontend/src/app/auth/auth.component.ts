@@ -18,7 +18,7 @@ export class AuthComponent implements OnInit {
   //  displayedColumns = ['id', 'name', 'email', 'password', 'address', 'work_number', 'personal_number', 'image_path'];
 
     constructor(private _router: Router, private _auth: AuthService) {
-        if(localStorage.getItem('errMessage')) {
+        if (localStorage.getItem('errMessage')) {
             this.errMessage = 'Неправильний логін, або пароль!';
         }
     }
@@ -44,8 +44,7 @@ export class AuthComponent implements OnInit {
                 localStorage.removeItem('errMessage');
                 console.log(JSON.parse(localStorage.getItem('LoggedIn')));
                 window.location.reload();
-            }
-            else {
+            } else {
                 localStorage.setItem('errMessage', 'true');
                 this.authenticate.length = 0;
                 this.errMessage = 'Неправильний логін, або пароль!';

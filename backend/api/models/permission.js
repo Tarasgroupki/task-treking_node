@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const permissionSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    name: String
+  _id: mongoose.Schema.Types.ObjectId,
+  name: String,
 });
 
 module.exports = mongoose.model('Permission', permissionSchema);

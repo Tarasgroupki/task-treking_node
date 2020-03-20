@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientsService } from './clients.service';
-import { ActivatedRoute,RouterModule, Router } from "@angular/router";
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -12,10 +12,10 @@ export class ClientsDeleteComponent {
     title = 'app';
     client: object;
 
-    constructor(private _client: ClientsService, private route: ActivatedRoute,private router: Router) {
+    constructor(private _client: ClientsService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe( params => this._client.deleteClient(params['id']).subscribe(res => {
             this.client = res;
-            this.router.navigate(['clients'])
+            this.router.navigate(['clients']);
             //  console.log(res);
         }) );
     }

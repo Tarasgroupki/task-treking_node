@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges ,SimpleChange } from '@angular/core';
+import { Component, OnInit, OnChanges , SimpleChange } from '@angular/core';
 import { SprintsService } from './sprints.service';
 import { ActivatedRoute } from '@angular/router';
 import { Sprint } from './sprints.model';
@@ -20,9 +20,9 @@ export class SprintsUpdateComponent implements OnInit {
         {value: 2, viewValue: 'Виконано'},
         {value: 3, viewValue: 'Не виконується'}
     ];
-    user: any = new Users('','');
+    user: any = new Users('', '');
     users = [];
-    lead: any = new Leads('','');
+    lead: any = new Leads('', '');
     leads = [];
    selected: number;
 

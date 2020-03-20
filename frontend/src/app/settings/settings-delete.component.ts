@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { ActivatedRoute,RouterModule, Router } from "@angular/router";
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -12,10 +12,10 @@ export class SettingsDeleteComponent {
     title = 'app';
     role: object;
 
-    constructor(private _role: SettingsService, private route: ActivatedRoute,private router: Router) {
+    constructor(private _role: SettingsService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe( params => this._role.deleteRole(params['id']).subscribe(res => {
             this.role = res;
-            this.router.navigate(['roles'])
+            this.router.navigate(['roles']);
             //  console.log(res);
         }) );
     }

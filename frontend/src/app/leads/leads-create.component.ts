@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LeadsService } from './leads.service';
-//import { ActivatedRoute } from "@angular/router";
-//import { FormGroup, FormBuilder } from '@angular/forms';
 import { Lead } from './leads.model';
 import { Users } from './users.model';
 import { Client } from './client.model';
@@ -12,12 +10,10 @@ import { Client } from './client.model';
   styleUrls: ['./leads.component.css']
 })
 export class LeadsCreateComponent implements OnInit {
-   // log(x) { console.log(x); }
-    ///client: any = 1;
     lead: any = new Lead('', '', 1, '', '', '5d10b7aae2ebc62620959dd2', '');
     leads: Lead[] = [];
-    user: any = new Users('','');
-    client: any = new Client('','');
+    user: any = new Users('', '');
+    client: any = new Client('', '');
     users = [];
     clients = [];
     statuses = [
@@ -31,18 +27,13 @@ export class LeadsCreateComponent implements OnInit {
 
     }
 
-    addLead(){
+    addLead() {
         this.lead.user_created = '5d10b7aae2ebc62620959dd2';
         this.leads.push(new Lead(this.lead.title, this.lead.description, this.lead.status, this.lead.user_assigned, this.lead.client, this.lead.user_created, this.lead.contact_date));
-        console.log(this.leads);
         this.loggedIn = JSON.parse(localStorage.getItem('LoggedIn'));
-        //this._lead_obj.getRole({token: this.loggedIn['token']}).subscribe(res => {
-          //  console.log(res);
-        //});
         this._lead_obj.createLead({arr: this.leads}).subscribe(res => {
         this.lead = res;
         this.leads.length = 0;
-        console.log(res);
     });
     }
     ngOnInit() {
@@ -57,7 +48,7 @@ export class LeadsCreateComponent implements OnInit {
             for (let i = 0; i < Object.keys(res).length; i++) {
                 this.client = new Client(res[i]._id, res[i].name);
                 this.clients.push(this.client);
-                console.log(this.clients);
+               // console.log(this.clients);
             }
         });
     }
