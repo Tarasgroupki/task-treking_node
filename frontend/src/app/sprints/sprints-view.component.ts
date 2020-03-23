@@ -16,8 +16,8 @@ export class SprintsViewComponent {
     id: string;
 
     constructor(private _sprint: SprintsService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(res => {
-            this.sprint = new Sprint(res['title'], res['description'], res['status'], res['lead_assigned'], res['user_created'], res['deadline']);
+        this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(resSprint => {
+            this.sprint = new Sprint(resSprint['title'], resSprint['description'], resSprint['status'], resSprint['lead_assigned'], resSprint['user_created'], resSprint['deadline']);
            this.id = params['id'];
            this._sprint.dailyForecast(this.id)
                 .subscribe(res => {

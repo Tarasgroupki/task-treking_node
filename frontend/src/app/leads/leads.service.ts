@@ -45,7 +45,7 @@ export class LeadsService {
         return this._http.put('http://localhost:2700/leads/' + id + '', arr, {
             headers: new HttpHeaders({'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'), })
-        }).map(result => result); //.catch(() => {
+        }).map(result => result); // .catch(() => {
          //   return  window.location.href = 'http://localhost:4200/not-found';
         // });
     }

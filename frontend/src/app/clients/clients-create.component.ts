@@ -20,7 +20,6 @@ export class ClientsCreateComponent implements OnInit {
 
     addClient() {
         this.clients.push(new Client(this.client.name, this.client.email, this.client.primary_number, this.client.secondary_number, this.client.address, this.client.zipcode, this.client.city, this.client.company_name, this.client.vat, this.client.company_type, this.client.user, this.client.industry_id));
-        console.log(typeof this.clients);
         this._client_obj.createClient(this.clients).subscribe(res => {
         this.client = res;
         this.clients.length = 0;

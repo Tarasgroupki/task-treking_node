@@ -19,21 +19,21 @@ export class SettingsCreateComponent implements OnInit {
     }
     addRole() {
         this.roles.push(new Roles(this.role.name));
-        this._setting_obj.createRole(this.roles).subscribe(res => {
-            this._setting_obj.getRoleByName(this.role.name).subscribe(res => {
+        this._setting_obj.createRole(this.roles).subscribe(resRole => {
+            this._setting_obj.getRoleByName(this.role.name).subscribe(resRoleByName => {
                 for (let i = 0; i < this.selected_checkbox.length; i++) {
-                    this.role_perm.push([res[0]['_id'], this.selected_checkbox[i]]);
+                    this.role_perm.push([resRoleByName[0]['_id'], this.selected_checkbox[i]]);
                 }
-                this._setting_obj.createRole_has_perm(this.role_perm).subscribe(res => {
-                    this.role = res;
+                this._setting_obj.createRole_has_perm(this.role_perm).subscribe(resRoleHasPerm => {
+                    this.role = resRoleHasPerm;
                 });
             });
         });
 
     }
     ngOnInit() {
-        this._setting_obj.getPermissions().subscribe(res => {
-            this.permissions = res;
+        this._setting_obj.getPermissions().subscribe(resPermissions => {
+            this.permissions = resPermissions;
         });
     }
     onCkeckboxSelected(value) {

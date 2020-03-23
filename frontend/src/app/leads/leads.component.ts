@@ -14,8 +14,8 @@ export class LeadsComponent implements OnInit {
     constructor(private _leads: LeadsService) {}
 
     ngOnInit() {
-        this._leads.getLeads().subscribe(res => {
-            this.leads = res;
+        this._leads.getLeads().subscribe(resLeads => {
+            this.leads = resLeads;
             for (const i of Object.keys(this.leads)) {
                 if (this.leads[i].status === 2) {
                     this.leads[i].status = 'Виконано';
@@ -24,14 +24,14 @@ export class LeadsComponent implements OnInit {
                 } else {
                     this.leads[i].status = 'Не виконується';
                 }
-                this._leads.getUserById(this.leads[i].user_created).subscribe( res => {
-                    this.leads[i].user_created = res['name'];
+                this._leads.getUserById(this.leads[i].user_created).subscribe( resUser => {
+                    this.leads[i].user_created = resUser['name'];
                 });
-                this._leads.getUserById(this.leads[i].user_assigned).subscribe( res => {
-                    this.leads[i].user_assigned = res['name'];
+                this._leads.getUserById(this.leads[i].user_assigned).subscribe( resUser => {
+                    this.leads[i].user_assigned = resUser['name'];
                 });
-                this._leads.getClientById(this.leads[i].client).subscribe( res => {
-                    this.leads[i].client = res['name'];
+                this._leads.getClientById(this.leads[i].client).subscribe( resClient => {
+                    this.leads[i].client = resClient['name'];
                 });
             }
         });

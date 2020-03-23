@@ -21,12 +21,12 @@ export class ClientsUpdateComponent implements OnInit {
 
     }
     ngOnInit() {
-    this.route.params.subscribe( params => this._client_obj.showClient(params['id']).subscribe(res => {
-    this.client = new Client(res['name'], res['email'], res['primary_number'], res['secondary_number'], res['address'], res['zipcode'], res['city'], res['company_name'], res['vat'], res['company_type'], res['user'], res['industry_id']);
+    this.route.params.subscribe( params => this._client_obj.showClient(params['id']).subscribe(resClient => {
+    this.client = new Client(resClient['name'], resClient['email'], resClient['primary_number'], resClient['secondary_number'], resClient['address'], resClient['zipcode'], resClient['city'], resClient['company_name'], resClient['vat'], resClient['company_type'], resClient['user'], resClient['industry_id']);
     this.id = params['id'];
-        this._client_obj.getUsers().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.user = new Users(res[i]._id, res[i].name);
+        this._client_obj.getUsers().subscribe(resUser => {
+            for (let i = 0; i < Object.keys(resUser).length; i++) {
+                this.user = new Users(resUser[i]._id, resUser[i].name);
                 this.users.push(this.user);
             }
             this.selectedValue = this.users[0].value.toString();

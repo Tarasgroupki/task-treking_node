@@ -5,46 +5,46 @@
 <div class="container">
   <nav>
     <img style="" width="300" height="200px" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    <mat-accordion>
+    <mat-accordion *ngIf="(authService.permissions | async) || LogginningData['permissions'] as permissions">
         <a class="links" style="text-align: center;" routerLink="profile" routerLinkActive="active"><button style="text-align: center;position: relative;width:100%;" mat-button><h2>Особистий кабінет</h2></button></a>
-      <mat-expansion-panel *ngIf="LogginningData['permissions'].indexOf( 'create-clients' ) != -1">
+      <mat-expansion-panel *ngIf="permissions.indexOf( 'create-clients' ) != -1">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <h3>Клієнти</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-          <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-clients' ) != -1" routerLink="clients/create" routerLinkActive="active">Добавити нового клієнта</a>
+          <a class="links" *ngIf="permissions.indexOf( 'create-clients' ) != -1" routerLink="clients/create" routerLinkActive="active">Добавити нового клієнта</a>
 <br />
-          <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-clients' ) != -1" routerLink="clients" routerLinkActive="active">Список клієнтів</a>
+          <a class="links" *ngIf="permissions.indexOf( 'create-clients' ) != -1" routerLink="clients" routerLinkActive="active">Список клієнтів</a>
 
       </mat-expansion-panel>
-      <mat-expansion-panel *ngIf="LogginningData['permissions'].indexOf( 'create-tasks' ) != -1" (opened)="panelOpenState = true"
+      <mat-expansion-panel *ngIf="permissions.indexOf( 'create-tasks' ) != -1" (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <h3>Завдання</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-tasks' ) != -1" routerLink="task/create" routerLinkActive="active">Добавити нове завдання</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-tasks' ) != -1" routerLink="task/create" routerLinkActive="active">Добавити нове завдання</a>
         <br />
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-tasks' ) != -1" routerLink="tasks" routerLinkActive="active">Список завдань</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-tasks' ) != -1" routerLink="tasks" routerLinkActive="active">Список завдань</a>
           <br />
-          <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-clients' ) != -1" routerLink="graph" routerLinkActive="active">Діаграма виконаних завдань</a>
+          <a class="links" *ngIf="permissions.indexOf( 'create-clients' ) != -1" routerLink="graph" routerLinkActive="active">Діаграма виконаних завдань</a>
       </mat-expansion-panel>
-      <mat-expansion-panel *ngIf="LogginningData['permissions'].indexOf( 'create-users' ) != -1" (opened)="panelOpenState = true"
+      <mat-expansion-panel *ngIf="permissions.indexOf( 'create-users' ) != -1" (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <h3>Користувачі</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-users' ) != -1" routerLink="user/create" routerLinkActive="active">Добавити нового користувача</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-users' ) != -1" routerLink="user/create" routerLinkActive="active">Добавити нового користувача</a>
         <br />
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-users' ) != -1" routerLink="users" routerLinkActive="active">Список користувачів</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-users' ) != -1" routerLink="users" routerLinkActive="active">Список користувачів</a>
       </mat-expansion-panel>
       <mat-expansion-panel
-              *ngIf="LogginningData['permissions'].indexOf( 'create-leads' ) != -1"
+              *ngIf="permissions.indexOf( 'create-leads' ) != -1"
               (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
@@ -52,12 +52,12 @@
             <h3>Терміни</h3>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-leads' ) != -1" routerLink="lead/create" routerLinkActive="active">Добавити новий термін</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-leads' ) != -1" routerLink="lead/create" routerLinkActive="active">Добавити новий термін</a>
         <br />
-        <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-leads' ) != -1" routerLink="leads" routerLinkActive="active">Список термінів</a>
+        <a class="links" *ngIf="permissions.indexOf( 'create-leads' ) != -1" routerLink="leads" routerLinkActive="active">Список термінів</a>
       </mat-expansion-panel>
         <mat-expansion-panel
-                *ngIf="LogginningData['permissions'].indexOf( 'create-sprints' ) != -1"
+                *ngIf="permissions.indexOf( 'create-sprints' ) != -1"
                 (opened)="panelOpenState = true"
                 (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
@@ -65,20 +65,20 @@
                     <h3>Блоки</h3>
                 </mat-panel-title>
             </mat-expansion-panel-header>
-            <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-sprints' ) != -1" routerLink="sprint/create" routerLinkActive="active">Добавити новий спрінт</a>
+            <a class="links" *ngIf="permissions.indexOf( 'create-sprints' ) != -1" routerLink="sprint/create" routerLinkActive="active">Добавити новий спрінт</a>
             <br />
-            <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-sprints' ) != -1" routerLink="sprints" routerLinkActive="active">Список спрінтів</a>
+            <a class="links" *ngIf="permissions.indexOf( 'create-sprints' ) != -1" routerLink="sprints" routerLinkActive="active">Список спрінтів</a>
         </mat-expansion-panel>
-        <mat-expansion-panel *ngIf="LogginningData['permissions'].indexOf( 'create-roles' ) != -1" (opened)="panelOpenState = true"
+        <mat-expansion-panel *ngIf="permissions.indexOf( 'create-roles' ) != -1" (opened)="panelOpenState = true"
                              (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     <h3>Налаштування</h3>
                 </mat-panel-title>
             </mat-expansion-panel-header>
-            <a class="links" *ngIf="LogginningData['permissions'].indexOf( 'create-roles' ) != -1" routerLink="roles" routerLinkActive="active">Керування ролями</a>
+            <a class="links" *ngIf="permissions.indexOf( 'create-roles' ) != -1" routerLink="roles" routerLinkActive="active">Керування ролями</a>
         </mat-expansion-panel>
-        <a class="links" style="text-align: center;" routerLink="logout/{{ LogginningData.user[0]['_id'] }}" routerLinkActive="active"><button style="text-align: center;position: relative;width:100%;" mat-button (click)="removeAuth()"><h2>Вихід</h2></button></a>
+        <a class="links" style="text-align: center;" (click)="removeAuth()" routerLinkActive="active"><button style="text-align: center;position: relative;width:100%;" mat-button (click)="removeAuth()"><h2>Вихід</h2></button></a>
     </mat-accordion>
   </nav>
 

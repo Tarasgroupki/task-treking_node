@@ -30,20 +30,20 @@ export class TasksUpdateComponent implements OnInit {
 
     }
     ngOnInit() {
-    this.route.params.subscribe( params => this._task_obj.showTask(params['id']).subscribe(res => {
-    this.date = new Date(res['deadline']);
-    this.task = new Task(res['title'], res['description'], res['status'], res['sprint_assigned'], res['user_created'], this.date);
+    this.route.params.subscribe( params => this._task_obj.showTask(params['id']).subscribe(resTask => {
+    this.date = new Date(resTask['deadline']);
+    this.task = new Task(resTask['title'], resTask['description'], resTask['status'], resTask['sprint_assigned'], resTask['user_created'], this.date);
     this.id = params['id'];
-     this._task_obj.getUsers().subscribe(res => {
-         for (let i = 0; i < Object.keys(res).length; i++) {
-             this.user = new Users(res[i]._id, res[i].name);
+     this._task_obj.getUsers().subscribe(resUsers => {
+         for (let i = 0; i < Object.keys(resUsers).length; i++) {
+             this.user = new Users(resUsers[i]._id, resUsers[i].name);
              this.users.push(this.user);
          }
      });
-     this._task_obj.getSprints().subscribe(res => {
-         for (let i = 0; i < Object.keys(res).length; i++) {
+     this._task_obj.getSprints().subscribe(resSprints => {
+         for (let i = 0; i < Object.keys(resSprints).length; i++) {
              console.log(this.id);
-             this.sprint = new Sprints(res[i]._id, res[i].title);
+             this.sprint = new Sprints(resSprints[i]._id, resSprints[i].title);
              this.sprints.push(this.sprint);
              console.log(this.sprints);
          }

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges , SimpleChange } from '@angular/core';
 import { UsersService } from './users.service';
+import { AuthService } from '../auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from './users.model';
 
@@ -18,7 +19,7 @@ export class UsersProfileComponent implements OnInit {
     roles = [];
     role_list: string;
 
-    constructor(public _user_obj: UsersService, private route: ActivatedRoute) {
+    constructor(public _user_obj: UsersService, private route: ActivatedRoute, private authService: AuthService) {
 
     }
     ngOnInit() {
@@ -46,7 +47,7 @@ export class UsersProfileComponent implements OnInit {
         this.filename = this.selectedFile.name;
         }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));
-        this._user_obj.updateProfileUser(this.LogginningData.user[0]['_id'], this.users).subscribe(res => { (this.filename !== null) ? this.user.image_path = this.filename : null;
+        this._user_obj.updateProfileUser((this.LogginningData.user[0]['_id']) ? this.LogginningData.user[0]['_id'] : this.authService.currentUser[0]['_id'], this.users).subscribe(res => { (this.filename !== null) ? this.user.image_path = this.filename : null;
             this.users.length = 0;
         });
     }
