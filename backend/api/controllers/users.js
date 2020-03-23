@@ -121,8 +121,11 @@ exports.users_edit_user = (req, res) => {
     for (const ops of req.body) {
       updateOps[ops.propName] = ops.value;
     }
-    if (req.body[0].password !== null) req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
-    else delete req.body[0].password;
+    if (req.body[0].password !== null) {
+      req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
+    } else {
+      delete req.body[0].password;
+    }
     User.update({ _id: id }, { $set: req.body[0] })
       .exec()
       .then((result) => {
@@ -142,8 +145,11 @@ exports.users_profile_user = (req, res) => {
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  if (req.body[0].password !== null) req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
-  else delete req.body[0].password;
+  if (req.body[0].password !== null) {
+    req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
+  } else {
+    delete req.body[0].password;
+  }
   if (req.body[0].image_path === null) delete req.body[0].image_path;
   User.update({ _id: id }, { $set: req.body[0] })
     .exec()
@@ -191,14 +197,15 @@ exports.users_login = (req, res) => {
             // for (let k = 0; k < resultUserHasRole.length; k++) {
             resultUserHasRole.forEach((item, key) => RoleHasPermission.find({ role: item.role }).exec().then((resultRoleHasPermission) => {
               changedRoles[key] = resultRoleHasPermission[key].role;
-              for (let j = 0; j < resultRoleHasPermission.length; j++) {
+              // for (let j = 0; j < resultRoleHasPermission.length; j++) {
+              resultRoleHasPermission.forEach((item1, key1) => {
                 count = resultRoleHasPermission.length - 1;
-                Permission.find({ _id: resultRoleHasPermission[j].permission }).exec().then((resultPermission) => {
+                Permission.find({ _id: item1.permission }).exec().then((resultPermission) => {
                   //    console.log(k); console.log(j);
                   permissions.push(resultPermission[0].name.replace(' ', '-'));
                   Role.find({ _id: changedRoles[key] }).exec().then((resultRole) => {
                     //     console.log(result[k].name);
-                    if (count === j) {
+                    if (count === key1) {
                       roles.push(resultRole[key].name);
                       const token = jwt.sign(
                         {
@@ -221,7 +228,7 @@ exports.users_login = (req, res) => {
                     }
                   });
                 });
-              }
+              });
             }));
           });
         }
