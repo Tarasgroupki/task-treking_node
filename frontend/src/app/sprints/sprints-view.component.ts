@@ -21,8 +21,8 @@ export class SprintsViewComponent {
            this.id = params['id'];
            this._sprint.dailyForecast(this.id)
                 .subscribe(res => {
-                    const temp_max = Object.values(res[0]);
-                    const temp_min = res[2];
+                    const tempMax = Object.values(res[0]);
+                    const tempMin = res[2];
                     const alldates = res[1];
 
                     const weatherDates = [];
@@ -37,12 +37,12 @@ export class SprintsViewComponent {
                             labels: weatherDates,
                             datasets: [
                                 {
-                                    data: temp_max,
+                                    data: tempMax,
                                     borderColor: '#3cba9f',
                                     fill: false
                                 },
                                 {
-                                    data: temp_min,
+                                    data: tempMin,
                                     borderColor: '#ffcc00',
                                     fill: false
                                 },

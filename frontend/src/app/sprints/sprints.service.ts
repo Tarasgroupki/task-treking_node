@@ -9,14 +9,12 @@ export class SprintsService {
 
   getUsers() {
       return this._http.get('http://localhost:2700/users', {
-          headers: new HttpHeaders({'Accept': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+          headers: new HttpHeaders({'Accept': 'application/json'})
       }).map(result => result);
   }
     getLeads() {
         return this._http.get('http://localhost:2700/leads', {
-            headers: new HttpHeaders({'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+            headers: new HttpHeaders({'Accept': 'application/json'})
         }).map(result => result);
     }
   getInvoices() {
@@ -24,36 +22,31 @@ export class SprintsService {
   }
   getSprints() {
       return this._http.get('http://localhost:2700/sprints', {
-          headers: new HttpHeaders({'Accept': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+          headers: new HttpHeaders({'Accept': 'application/json'})
       }).map(result => result);
   }
   showSprint(id: number) {
       return this._http.get('http://localhost:2700/sprints/' + id + '', {
-          headers: new HttpHeaders({'Accept': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+          headers: new HttpHeaders({'Accept': 'application/json'})
       }).map(result => result).catch(() => {
           return  window.location.href = 'http://localhost:4200/not-found';
       });
   }
   createSprint(arr: object) {
       return this._http.post('http://localhost:2700/sprints', arr, {
-          headers: new HttpHeaders({'Accept': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+          headers: new HttpHeaders({'Accept': 'application/json'})
       }).map(result => result);
   }
     updateSprint(id: number, arr: object) {
         return this._http.patch('http://localhost:2700/sprints/' + id + '', arr, {
-            headers: new HttpHeaders({'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+            headers: new HttpHeaders({'Accept': 'application/json'})
         }).map(result => result).catch(() => {
             return  window.location.href = 'http://localhost:4200/not-found';
         });
     }
     deleteSprint(id: number) {
       return this._http.delete('http://localhost:2700/sprints/' + id + '', {
-          headers: new HttpHeaders({'Accept': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+          headers: new HttpHeaders({'Accept': 'application/json'})
       }).map(result => result);
     }
     dailyForecast(id: string) {
@@ -62,14 +55,12 @@ export class SprintsService {
     }
     getUserById(id: number) {
         return this._http.get('http://localhost:2700/users/' + id + '', {
-            headers: new HttpHeaders({'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+            headers: new HttpHeaders({'Accept': 'application/json'})
         }).map(result => result);
     }
     getLeadById(id: number) {
         return this._http.get('http://localhost:2700/leads/' + id + '', {
-            headers: new HttpHeaders({'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token'), })
+            headers: new HttpHeaders({'Accept': 'application/json'})
         }).map(result => result);
     }
 }

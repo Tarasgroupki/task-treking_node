@@ -19,7 +19,7 @@ export class UsersRolesComponent implements OnInit {
     constructor(private _users: UsersService, private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.params.subscribe( params => this._users.getRoles().subscribe(resRoles => {
+        this.route.params.subscribe( () => this._users.getRoles().subscribe(resRoles => {
             this.roles = resRoles;
             this.route.params.subscribe( params => this._users.getCheckedRoles(params['id']).subscribe(resCheckedRoles => {
                 this.id = params['id'];
