@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-//import { ApiService } from './api.service';
+import { AuthService} from './auth/auth.service';
 import {ClientsInterface} from './clients-interface';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,8 @@ export class AppComponent implements OnInit {
   title = 'app';
   public LogginningData = JSON.parse(localStorage.getItem('LoggedIn'));
   route: string;
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private authService: AuthService) {
+    console.log(this.authService.permissions);
       console.log(this.LogginningData);
        _router.events.subscribe((url: any) => {
          this.route = url['url'];
@@ -32,5 +33,6 @@ export class AppComponent implements OnInit {
     removeAuth() {
         localStorage.removeItem('token');
         localStorage.removeItem('LoggedIn');
+        this._router.navigate(['login']);
     }
 }

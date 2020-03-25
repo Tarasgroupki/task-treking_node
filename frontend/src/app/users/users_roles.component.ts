@@ -19,11 +19,11 @@ export class UsersRolesComponent implements OnInit {
     constructor(private _users: UsersService, private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.params.subscribe( params => this._users.getRoles().subscribe(res => {
-            this.roles = res;
-            this.route.params.subscribe( params => this._users.getCheckedRoles(params['id']).subscribe(res => {
+        this.route.params.subscribe( () => this._users.getRoles().subscribe(resRoles => {
+            this.roles = resRoles;
+            this.route.params.subscribe( params => this._users.getCheckedRoles(params['id']).subscribe(resCheckedRoles => {
                 this.id = params['id'];
-                     this.checked_roles = res;
+                this.checked_roles = resCheckedRoles;
             }));
         }));
     }
@@ -43,8 +43,8 @@ export class UsersRolesComponent implements OnInit {
     }
     assignRole() {
         this.checkboxes.push(this.selected_checkbox, this.unselected_checkbox);
-        this._users.AssignRoles(this.id, this.checkboxes).subscribe(res => {
-            console.log(res);
+        this._users.AssignRoles(this.id, this.checkboxes).subscribe(resAssignRoles => {
+            console.log(resAssignRoles);
         });
     }
 

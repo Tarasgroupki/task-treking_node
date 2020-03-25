@@ -14,8 +14,8 @@ export class SprintsComponent implements OnInit {
     constructor(private _sprints: SprintsService) {}
 
     ngOnInit() {
-        this._sprints.getSprints().subscribe(res => {
-            this.sprints = res;
+        this._sprints.getSprints().subscribe(resSprints => {
+            this.sprints = resSprints;
             for (const i of Object.keys(this.sprints)) {
                 if (this.sprints[i].status === 2) {
                     this.sprints[i].status = 'Виконано';
@@ -24,11 +24,11 @@ export class SprintsComponent implements OnInit {
                 } else {
                     this.sprints[i].status = 'Не виконується';
                 }
-                this._sprints.getUserById(this.sprints[i].user_created).subscribe( res => {
-                    this.sprints[i].user_created = res['name'];
+                this._sprints.getUserById(this.sprints[i].user_created).subscribe( resUser => {
+                    this.sprints[i].user_created = resUser['name'];
                 });
-                this._sprints.getLeadById(this.sprints[i].lead_assigned).subscribe( res => {
-                    this.sprints[i].lead_assigned = res['title'];
+                this._sprints.getLeadById(this.sprints[i].lead_assigned).subscribe( resLead => {
+                    this.sprints[i].lead_assigned = resLead['title'];
                 });
             }
         });

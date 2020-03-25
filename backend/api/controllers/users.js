@@ -121,8 +121,11 @@ exports.users_edit_user = (req, res) => {
     for (const ops of req.body) {
       updateOps[ops.propName] = ops.value;
     }
-    if (req.body[0].password !== null) req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
-    else delete req.body[0].password;
+    if (req.body[0].password !== null) {
+      req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
+    } else {
+      delete req.body[0].password;
+    }
     User.update({ _id: id }, { $set: req.body[0] })
       .exec()
       .then((result) => {
@@ -142,8 +145,11 @@ exports.users_profile_user = (req, res) => {
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  if (req.body[0].password !== null) req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
-  else delete req.body[0].password;
+  if (req.body[0].password !== null) {
+    req.body[0].password = bcrypt.hashSync(req.body[0].password, 12);
+  } else {
+    delete req.body[0].password;
+  }
   if (req.body[0].image_path === null) delete req.body[0].image_path;
   User.update({ _id: id }, { $set: req.body[0] })
     .exec()

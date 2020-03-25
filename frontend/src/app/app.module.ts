@@ -53,6 +53,8 @@ import {GraphComponent} from './graph/graph.component';
 import {GraphService} from './graph/graph.service';
 import {SprintsService} from './sprints/sprints.service';
 import {NotFoundComponent} from './not-found/not-found.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptorService } from './token-interceptor.service';
 
 
 @NgModule({
@@ -248,7 +250,12 @@ import {NotFoundComponent} from './not-found/not-found.component';
     MaterialModule
   //  AppRoutingModule
   ],
-  providers: [ApiService, ClientsService, TasksService, LeadsService, UsersService, AuthService, SettingsService, GraphService, SprintsService],
+  providers: [ApiService, ClientsService, TasksService, LeadsService, UsersService, AuthService, SettingsService, GraphService, SprintsService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

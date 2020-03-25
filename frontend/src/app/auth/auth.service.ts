@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthService {
 
+  currentUser = new BehaviorSubject(null);
+  permissions = new BehaviorSubject(null);
+
   constructor(private _http: HttpClient) { }
 
     getAuth(arr: object) {
         return this._http.post('http://localhost:2700/users/login', arr, {
             headers: new HttpHeaders({'Accept': 'application/json',
-            //    'X-Content-Type-Options': 'nosniff',
-            //    'Content-Type': 'text/plain',
             })
         }).map(result => result);
     }

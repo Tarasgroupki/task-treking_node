@@ -41,14 +41,12 @@ export class LeadsCreateComponent implements OnInit {
             for (let i = 0; i < Object.keys(res).length; i++) {
                 this.user = new Users(res[i]._id, res[i].name);
                 this.users.push(this.user);
-                console.log(this.users);
             }
         });
         this._lead_obj.getClients().subscribe(res => {
             for (let i = 0; i < Object.keys(res).length; i++) {
                 this.client = new Client(res[i]._id, res[i].name);
                 this.clients.push(this.client);
-               // console.log(this.clients);
             }
         });
     }

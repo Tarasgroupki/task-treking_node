@@ -16,13 +16,13 @@ export class SprintsViewComponent {
     id: string;
 
     constructor(private _sprint: SprintsService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(res => {
-            this.sprint = new Sprint(res['title'], res['description'], res['status'], res['lead_assigned'], res['user_created'], res['deadline']);
+        this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(resSprint => {
+            this.sprint = new Sprint(resSprint['title'], resSprint['description'], resSprint['status'], resSprint['lead_assigned'], resSprint['user_created'], resSprint['deadline']);
            this.id = params['id'];
            this._sprint.dailyForecast(this.id)
                 .subscribe(res => {
-                    const temp_max = Object.values(res[0]);
-                    const temp_min = res[2];
+                    const tempMax = Object.values(res[0]);
+                    const tempMin = res[2];
                     const alldates = res[1];
 
                     const weatherDates = [];
@@ -37,12 +37,12 @@ export class SprintsViewComponent {
                             labels: weatherDates,
                             datasets: [
                                 {
-                                    data: temp_max,
+                                    data: tempMax,
                                     borderColor: '#3cba9f',
                                     fill: false
                                 },
                                 {
-                                    data: temp_min,
+                                    data: tempMin,
                                     borderColor: '#ffcc00',
                                     fill: false
                                 },

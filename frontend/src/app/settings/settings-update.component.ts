@@ -22,25 +22,25 @@ export class SettingsUpdateComponent implements OnInit {
 
     }
     updateRole() {
-        this._setting_obj.getRoleByName(this.role.name).subscribe(res => {
+        this._setting_obj.getRoleByName(this.role.name).subscribe(resRoleByName => {
             this.roles.push(this.role.name);
             this.role_perm.push(this.selected_checkbox, this.unselected_checkbox, this.roles);
-            this._setting_obj.updateRole(res[0]['_id'], this.role_perm).subscribe(res => {
-                this.role = res;
+            this._setting_obj.updateRole(resRoleByName[0]['_id'], this.role_perm).subscribe(resRole => {
+                this.role = resRole;
             });
         });
     }
     ngOnInit() {
-        this.route.params.subscribe( params => this._setting_obj.showRole(params['id']).subscribe(res => {
-            this.role = new Roles(res[0]['name']);
+        this.route.params.subscribe( params => this._setting_obj.showRole(params['id']).subscribe(resRole => {
+            this.role = new Roles(resRole[0]['name']);
             this.id = params['id'];
         }));
-        this._setting_obj.getPermissions().subscribe(res => {
-            this.permissions = res;
+        this._setting_obj.getPermissions().subscribe(resPermissions => {
+            this.permissions = resPermissions;
         });
-        this.route.params.subscribe( params => this._setting_obj.getOnePermission(params['id']).subscribe(res => {
+        this.route.params.subscribe( params => this._setting_obj.getOnePermission(params['id']).subscribe(resPermission => {
             this.id = params['id'];
-                this.checked_permissions = res;
+                this.checked_permissions = resPermission;
         }));
     }
     onCkeckboxSelected(value) {

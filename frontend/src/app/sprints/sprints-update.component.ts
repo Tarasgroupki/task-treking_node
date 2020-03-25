@@ -30,19 +30,16 @@ export class SprintsUpdateComponent implements OnInit {
 
     }
     ngOnInit() {
-    this.route.params.subscribe( params => this._sprint_obj.showSprint(params['id']).subscribe(res => {
-    this.date = new Date(res['deadline']);
-    this.sprint = new Sprint(res['title'], res['description'], res['status'], res['lead_assigned'], res['user_created'], this.date);
+    this.route.params.subscribe( params => this._sprint_obj.showSprint(params['id']).subscribe(resSprint => {
+    this.date = new Date(resSprint['deadline']);
+    this.sprint = new Sprint(resSprint['title'], resSprint['description'], resSprint['status'], resSprint['lead_assigned'], resSprint['user_created'], this.date);
     this.id = params['id'];
      this._sprint_obj.getUsers().subscribe(res => {
          for (let i = 0; i < Object.keys(res).length; i++) {
-             console.log(this.id);
              this.user = new Users(res[i]._id, res[i].name);
              this.users.push(this.user);
              console.log(this.users);
          }
-        // this.selected = this.users[0].value;
-         //console.log(this.users);
      });
         this._sprint_obj.getLeads().subscribe(res => {
             for (let i = 0; i < Object.keys(res).length; i++) {
@@ -52,24 +49,17 @@ export class SprintsUpdateComponent implements OnInit {
                 console.log(this.leads);
             }
         });
-    // this.selected = res['data']['user_assigned_id'];
-    // document.getElementById("deadline").value = "2014/02/09";
     console.log(this.selected);
 }));
 }
 
 
     updateSprint() {
-       // this.task.deadline = Date.parse(this.task.deadline);
         this.sprints.push(new Sprint(this.sprint.title, this.sprint.description, this.sprint.status, this.sprint.lead_assigned, this.sprint.user_created, this.sprint.deadline));
         console.log(this.sprints[0]['deadline']);
-       // this.selected = this.client.user_id;
-        this._sprint_obj.updateSprint(this.id, this.sprints).subscribe(res => {
+        this._sprint_obj.updateSprint(this.id, this.sprints).subscribe(resSprint => {
             this.sprints.length = 0;
-        console.log(res);
     });
-
-
     }
 
 }

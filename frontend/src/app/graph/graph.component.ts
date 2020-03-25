@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { GraphService } from './graph.service';
 import { Chart } from 'chart.js';
 
 @Component({
-  selector: 'graph-root',
+  selector: 'app-graph-root',
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
-export class GraphComponent {
+export class GraphComponent implements OnInit {
 
   chart = [];
 
