@@ -12,11 +12,10 @@ export class SprintsDeleteComponent {
     title = 'app';
     sprint: object;
 
-    constructor(private _sprint: SprintsService, private route: ActivatedRoute, private router: Router) {
-        this.route.params.subscribe( params => this._sprint.deleteSprint(params['id']).subscribe(res => {
-            this.sprint = res;
+    constructor(private sprintsService: SprintsService, private route: ActivatedRoute, private router: Router) {
+        this.route.params.subscribe( params => this.sprintsService.deleteSprint(params['id']).subscribe(resSprint => {
+            this.sprint = resSprint;
             this.router.navigate(['sprints']);
-            //  console.log(res);
         }) );
     }
 

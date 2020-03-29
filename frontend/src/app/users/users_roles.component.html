@@ -1,13 +1,13 @@
 <h1>
   Change roles for user:
 </h1>
-<div *ngIf="!checked_roles">
+<div *ngIf="!checkedRoles">
   <mat-checkbox *ngFor="let role of roles" name="roles[]" [value]="role['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
 </div>
-<div *ngIf="checked_roles">
+<div *ngIf="checkedRoles">
   <div *ngFor="let role of roles">
-  <mat-checkbox  *ngIf="checked_roles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
-   <mat-checkbox  *ngIf="!checked_roles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+  <mat-checkbox  *ngIf="checkedRoles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+   <mat-checkbox  *ngIf="!checkedRoles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
   </div>
 </div>
 <div class="form-group">

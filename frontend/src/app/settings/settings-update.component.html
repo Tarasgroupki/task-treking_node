@@ -12,13 +12,13 @@
         <p *ngIf="name.errors.minlength">Name must have more than 4 symbols</p>
     </div>
 </div>
-<div *ngIf="!checked_permissions">
+<div *ngIf="!checkedPermissions">
     <mat-checkbox *ngFor="let permission of permissions" name="permissions[]" [value]="permission['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
 </div>
-<div *ngIf="checked_permissions">
+<div *ngIf="checkedPermissions">
     <div *ngFor="let permission of permissions">
-        <mat-checkbox  *ngIf="checked_permissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
-        <mat-checkbox  *ngIf="!checked_permissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
+        <mat-checkbox  *ngIf="checkedPermissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
+        <mat-checkbox  *ngIf="!checkedPermissions[permission['_id']]" name="permissions[]" [value]="permission['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ permission['name'] }}</mat-checkbox>
     </div>
 </div>
 <div class="form-group">

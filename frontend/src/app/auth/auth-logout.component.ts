@@ -11,7 +11,7 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 export class AuthLogoutsComponent {
     title = 'app';
 
-    constructor(private _auth: AuthService, private route: ActivatedRoute, private router: Router) {
+    constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
         localStorage.removeItem('token');
         localStorage.removeItem('LoggedIn');
         this.router.navigate(['login']);

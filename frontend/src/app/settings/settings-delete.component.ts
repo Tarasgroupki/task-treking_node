@@ -12,23 +12,11 @@ export class SettingsDeleteComponent {
     title = 'app';
     role: object;
 
-    constructor(private _role: SettingsService, private route: ActivatedRoute, private router: Router) {
-        this.route.params.subscribe( params => this._role.deleteRole(params['id']).subscribe(res => {
-            this.role = res;
+    constructor(private settingsService: SettingsService, private route: ActivatedRoute, private router: Router) {
+        this.route.params.subscribe( params => this.settingsService.deleteRole(params['id']).subscribe(resRole => {
+            this.role = resRole;
             this.router.navigate(['roles']);
-            //  console.log(res);
         }) );
     }
-
-  /*  ngOnInit() {
-        this._client.showClient().subscribe(res => {
-            this.client = res;
-          //  console.log(res);
-        });*/
-    /*ngOnInit() {
-        this._clients.getClients().subscribe(res => {
-            this.clients = res;
-        });
-    }*/
 
 }

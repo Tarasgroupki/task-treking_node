@@ -15,11 +15,11 @@ export class SprintsViewComponent {
     chart = [];
     id: string;
 
-    constructor(private _sprint: SprintsService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._sprint.showSprint(params['id']).subscribe(resSprint => {
+    constructor(private sprintsService: SprintsService, private route: ActivatedRoute) {
+        this.route.params.subscribe( params => this.sprintsService.showSprint(params['id']).subscribe(resSprint => {
             this.sprint = new Sprint(resSprint['title'], resSprint['description'], resSprint['status'], resSprint['lead_assigned'], resSprint['user_created'], resSprint['deadline']);
            this.id = params['id'];
-           this._sprint.dailyForecast(this.id)
+           this.sprintsService.dailyForecast(this.id)
                 .subscribe(res => {
                     const tempMax = Object.values(res[0]);
                     const tempMin = res[2];

@@ -17,14 +17,14 @@ export class ClientsUpdateComponent implements OnInit {
     users = [];
     selectedValue: number;
 
-    constructor(public _client_obj: ClientsService, private route: ActivatedRoute) {
+    constructor(public clientsService: ClientsService, private route: ActivatedRoute) {
 
     }
     ngOnInit() {
-    this.route.params.subscribe( params => this._client_obj.showClient(params['id']).subscribe(resClient => {
+    this.route.params.subscribe( params => this.clientsService.showClient(params['id']).subscribe(resClient => {
     this.client = new Client(resClient['name'], resClient['email'], resClient['primary_number'], resClient['secondary_number'], resClient['address'], resClient['zipcode'], resClient['city'], resClient['company_name'], resClient['vat'], resClient['company_type'], resClient['user'], resClient['industry_id']);
     this.id = params['id'];
-        this._client_obj.getUsers().subscribe(resUser => {
+        this.clientsService.getUsers().subscribe(resUser => {
             for (let i = 0; i < Object.keys(resUser).length; i++) {
                 this.user = new Users(resUser[i]._id, resUser[i].name);
                 this.users.push(this.user);
@@ -36,7 +36,7 @@ export class ClientsUpdateComponent implements OnInit {
 
     updateClient() {
         this.clientObj.push(new Client(this.client.name, this.client.email, this.client.primary_number, this.client.secondary_number, this.client.address, this.client.zipcode, this.client.city, this.client.company_name, this.client.vat, this.client.company_type, this.client.user, this.client.industry_id));
-        this._client_obj.updateClient(this.id, this.clientObj).subscribe(res => {
+        this.clientsService.updateClient(this.id, this.clientObj).subscribe(() => {
             this.clientObj.length = 0;
     });
     }

@@ -11,17 +11,16 @@ export class UsersCreateComponent implements OnInit {
     user: any = new User('', '', '', '', '', '', '');
     users: User[] = [];
 
-    constructor(public _user_obj: UsersService) {
+    constructor(public usersService: UsersService) {
 
     }
 
     addUser() {
         this.users.push(new User(this.user.name, this.user.email, this.user.password, null , null, null, null));
         console.log(this.users);
-        this._user_obj.createUser(this.users).subscribe(res => {
-        this.user = res;
+        this.usersService.createUser(this.users).subscribe(resUser => {
+        this.user = resUser;
         this.users.length = 0;
-        console.log(res);
     });
     }
     ngOnInit() {

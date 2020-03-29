@@ -24,28 +24,27 @@ export class TasksUpdateComponent implements OnInit {
     users = [];
     sprint: any = new Users('', '');
     sprints = [];
-   selected: number;
+    selected: number;
 
-    constructor(public _task_obj: TasksService, private route: ActivatedRoute) {
+    constructor(public tasksService: TasksService, private route: ActivatedRoute) {
 
     }
     ngOnInit() {
-    this.route.params.subscribe( params => this._task_obj.showTask(params['id']).subscribe(resTask => {
+    this.route.params.subscribe( params => this.tasksService.showTask(params['id']).subscribe(resTask => {
     this.date = new Date(resTask['deadline']);
     this.task = new Task(resTask['title'], resTask['description'], resTask['status'], resTask['sprint_assigned'], resTask['user_created'], this.date);
     this.id = params['id'];
-     this._task_obj.getUsers().subscribe(resUsers => {
+     this.tasksService.getUsers().subscribe(resUsers => {
          for (let i = 0; i < Object.keys(resUsers).length; i++) {
              this.user = new Users(resUsers[i]._id, resUsers[i].name);
              this.users.push(this.user);
          }
      });
-     this._task_obj.getSprints().subscribe(resSprints => {
+     this.tasksService.getSprints().subscribe(resSprints => {
          for (let i = 0; i < Object.keys(resSprints).length; i++) {
              console.log(this.id);
              this.sprint = new Sprints(resSprints[i]._id, resSprints[i].title);
              this.sprints.push(this.sprint);
-             console.log(this.sprints);
          }
      });
     console.log(this.selected);
@@ -54,7 +53,7 @@ export class TasksUpdateComponent implements OnInit {
 
     updateTask() {
         this.tasks.push(new Task(this.task.title, this.task.description, this.task.status, this.task.sprint_assigned, this.task.user_created, this.task.deadline));
-        this._task_obj.updateTask(this.id, this.tasks).subscribe(res => {
+        this.tasksService.updateTask(this.id, this.tasks).subscribe(() => {
             this.tasks.length = 0;
     });
 

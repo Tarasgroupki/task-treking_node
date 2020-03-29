@@ -23,21 +23,21 @@ export class TasksCreateComponent implements OnInit {
     sprint: any = new Sprints('', '');
     sprints = [];
 
-    constructor(public _task_obj: TasksService) {
+    constructor(public tasksService: TasksService) {
 
     }
 
     addTask() {
         this.tasks.push(new Task(this.task.title, this.task.description, this.task.status, this.task.sprint_assigned, this.task.user_created, this.task.deadline));
-        this._task_obj.createTask(this.tasks).subscribe(res => {
-        this.task = res;
+        this.tasksService.createTask(this.tasks).subscribe(resTask => {
+        this.task = resTask;
         this.task.length = 0;
     });
     }
     ngOnInit() {
-        this._task_obj.getSprints().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.sprint = new Users(res[i]._id, res[i].title);
+        this.tasksService.getSprints().subscribe(resSprints => {
+            for (let i = 0; i < Object.keys(resSprints).length; i++) {
+                this.sprint = new Users(resSprints[i]._id, resSprints[i].title);
                 this.sprints.push(this.sprint);
             }
         });

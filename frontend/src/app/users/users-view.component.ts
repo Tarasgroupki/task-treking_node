@@ -13,10 +13,10 @@ export class UsersViewComponent {
     user: User = new User('', '', '', '', '', '', '');
     id: number;
 
-    constructor(private _user: UsersService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._user.showUser(params['id']).subscribe(res => {
-            this.user = new User(res['name'], res['email'], res['password'], res['address'], res['work_number'], res['personal_number'], res['image_path']);
-         this.id = params['id'];
+    constructor(private usersService: UsersService, private route: ActivatedRoute) {
+        this.route.params.subscribe( params => this.usersService.showUser(params['id']).subscribe(resUser => {
+            this.user = new User(resUser['name'], resUser['email'], resUser['password'], resUser['address'], resUser['work_number'], resUser['personal_number'], resUser['image_path']);
+            this.id = params['id'];
         }) );
     }
 }

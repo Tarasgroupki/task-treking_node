@@ -13,9 +13,9 @@ export class LeadsViewComponent {
     lead: any = new Lead('', '', 1, '', '', '', '');
     id: number;
 
-    constructor(private _lead: LeadsService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._lead.showLead(params['id']).subscribe(res => {
-            this.lead = new Lead(res['title'], res['description'], res['status'], res['user_assigned_id'], res['client_id'], res['user_created_id'], res['contact_date']);
+    constructor(private leadsService: LeadsService, private route: ActivatedRoute) {
+        this.route.params.subscribe( params => this.leadsService.showLead(params['id']).subscribe(resLead => {
+            this.lead = new Lead(resLead['title'], resLead['description'], resLead['status'], resLead['user_assigned_id'], resLead['client_id'], resLead['user_created_id'], resLead['contact_date']);
             this.id = params['id'];
         }) );
     }

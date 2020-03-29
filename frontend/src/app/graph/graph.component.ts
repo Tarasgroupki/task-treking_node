@@ -11,10 +11,10 @@ export class GraphComponent implements OnInit {
 
   chart = [];
 
-  constructor(private _weather: GraphService) {}
+  constructor(private graphService: GraphService) {}
 
   ngOnInit() {
-    this._weather.dailyForecast()
+    this.graphService.dailyForecast()
       .subscribe(res => {
 
   const arr = JSON.parse(res['data']);

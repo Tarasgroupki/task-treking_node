@@ -25,22 +25,20 @@ export class LeadsUpdateComponent implements OnInit {
         {value: 3, viewValue: 'Не виконується'}
     ];
 
+    constructor(public leadsService: LeadsService, private route: ActivatedRoute) { }
 
-    constructor(public _lead_obj: LeadsService, private route: ActivatedRoute) {
-
-    }
     ngOnInit() {
-    this.route.params.subscribe( params => this._lead_obj.showLead(params['id']).subscribe(resLead => {
+    this.route.params.subscribe( params => this.leadsService.showLead(params['id']).subscribe(resLead => {
         this.date = new Date(resLead['contact_date']);
     this.lead = new Lead(resLead['title'], resLead['description'], resLead['status'], resLead['user_assigned'], resLead['client'], resLead['user_created'], this.date);
     this.id = params['id'];
-     this._lead_obj.getUsers().subscribe(resUsers => {
+     this.leadsService.getUsers().subscribe(resUsers => {
          for (let i = 0; i < Object.keys(resUsers).length; i++) {
              this.user = new Users(resUsers[i]._id, resUsers[i].name);
              this.users.push(this.user);
          }
      });
-      this._lead_obj.getClients().subscribe(resClients => {
+      this.leadsService.getClients().subscribe(resClients => {
           for (let i = 0; i < Object.keys(resClients).length; i++) {
               this.client = new Client(resClients[i]._id, resClients[i].name);
               this.clients.push(this.client);
@@ -48,11 +46,9 @@ export class LeadsUpdateComponent implements OnInit {
       });
 }));
 }
-
-
     updateLead() {
         this.leads.push(new Lead(this.lead.title, this.lead.description, this.lead.status, this.lead.user_assigned, this.lead.client, this.lead.user_created, this.lead.contact_date));
-        this._lead_obj.updateLead(this.id, this.leads).subscribe(res => {
+        this.leadsService.updateLead(this.id, this.leads).subscribe(res => {
             this.leads.length = 0;
     });
 

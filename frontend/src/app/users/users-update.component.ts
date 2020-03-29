@@ -15,14 +15,13 @@ export class UsersUpdateComponent implements OnInit {
     selectedFile = null;
     filename = null;
 
-    constructor(public _user_obj: UsersService, private route: ActivatedRoute) {
+    constructor(public usersService: UsersService, private route: ActivatedRoute) { }
 
-    }
     ngOnInit() {
-    this.route.params.subscribe( params => this._user_obj.showUser(params['id']).subscribe(res => {
-    this.user = new User(res['name'], res['email'], res['password'], res['address'], res['work_number'], res['personal_number'], res['image_path']);
+    this.route.params.subscribe( params => this.usersService.showUser(params['id']).subscribe(resUser => {
+    this.user = new User(resUser['name'], resUser['email'], resUser['password'], resUser['address'], resUser['work_number'], resUser['personal_number'], resUser['image_path']);
     this.id = params['id'];
-     }));
+    }));
 }
     onFileSelected(event) {
         this.selectedFile = <File>event.target.files[0];
@@ -33,13 +32,11 @@ export class UsersUpdateComponent implements OnInit {
        if (this.selectedFile != null) {
        const fd = new FormData();
        fd.append('image_path', this.selectedFile, this.selectedFile.name);
-       this._user_obj.fileUpload(fd).subscribe(res => {
-           console.log(res);
-       });
+       this.usersService.fileUpload(fd).subscribe(() => {});
        this.filename = this.selectedFile.name;
        }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));
-        this._user_obj.updateUser(this.id, this.users).subscribe(res => {
+        this.usersService.updateUser(this.id, this.users).subscribe(() => {
             this.users.length = 0;
     });
     }

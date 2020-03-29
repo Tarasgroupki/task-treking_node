@@ -22,15 +22,13 @@ export class TasksViewComponent {
     vote_id: any;
     task: any = new Task('', '', 1, '', '',  '');
 
-    constructor(private _task: TasksService, private route: ActivatedRoute) {
-        this.route.params.subscribe( params => this._task.showTask(params['id']).subscribe(resTask => {
+    constructor(private tasksService: TasksService, private route: ActivatedRoute) {
+        this.route.params.subscribe( params => this.tasksService.showTask(params['id']).subscribe(resTask => {
             this.id = params['id'];
             this.task = new Task(resTask['title'], resTask['description'], resTask['status'], resTask['user_assigned'], resTask['user_created'], resTask['deadline']);
            this.votes_arr = [{'value' : 1}, {'value' : 2}, {'value' : 3}, {'value' : 5}, {'value' : 8}, {'value' : 13}, {'value' : 21}, {'value' : 34}, {'value' : 55}, {'value' : 89}, {'value' : 144}, {'value' : 233}];
-             // console.log(this.task);
-            this._task.checkVote(this.id).subscribe(resVote => {
+            this.tasksService.checkVote(this.id).subscribe(resVote => {
                 this.users = resVote;
-           //     console.log(this.users);
             });
         }) );
     }
@@ -45,19 +43,17 @@ export class TasksViewComponent {
 
     addVote() {
         this.votes.push(new Votes(this.user_id, this.id, this.selectedValue));
-        this._task.createVote(this.votes).subscribe(resVote => {
+        this.tasksService.createVote(this.votes).subscribe(resVote => {
             this.vote = resVote;
-           // console.log(res);
         });
         console.log(this.selectedValue);
     }
 
     updateVote() {
-        this._task.checkVoter(this.user_id + '_' + this.id).subscribe(resVoter => {
+        this.tasksService.checkVoter(this.user_id + '_' + this.id).subscribe(resVoter => {
             this.votes.push(new Votes(this.user_id, this.id, this.selectedValue));
             this.vote_id = resVoter;
-            this._task.updateVote(this.vote_id[0]['_id'], this.votes).subscribe(resVote => {
-             //   console.log(resVote);
+            this.tasksService.updateVote(this.vote_id[0]['_id'], this.votes).subscribe(() => {
                 this.votes.length = 0;
             });
         });
