@@ -17,18 +17,18 @@ export class UsersProfileComponent implements OnInit {
     selectedFile = null;
     filename = null;
     roles = [];
-    role_list: string;
+    roleList: string;
 
-    constructor(public _user_obj: UsersService, private route: ActivatedRoute, private authService: AuthService) {
+    constructor(public usersService: UsersService, private route: ActivatedRoute, private authService: AuthService) {
 
     }
     ngOnInit() {
-        for ( let i = 0; i < this.LogginningData['roles'].length; i++) {
+        for (let i = 0; i < this.LogginningData['roles'].length; i++) {
             this.roles[i] = this.LogginningData['roles'][i];
         }
-        this.role_list = this.roles.join();
-        this._user_obj.showUserProfile(this.LogginningData.user[0]['_id']).subscribe(res => {
-            this.user = new User(res['name'], res['email'], res['password'], res['address'], res['work_number'], res['personal_number'], res['image_path']);
+        this.roleList = this.roles.join();
+        this.usersService.showUserProfile(this.LogginningData.user[0]['_id']).subscribe(resUser => {
+            this.user = new User(resUser['name'], resUser['email'], resUser['password'], resUser['address'], resUser['work_number'], resUser['personal_number'], resUser['image_path']);
             console.log(this.user);
         });
     }
@@ -41,13 +41,11 @@ export class UsersProfileComponent implements OnInit {
         if (this.selectedFile !== null) {
             const fd = new FormData();
             fd.append('image_path', this.selectedFile, this.selectedFile.name);
-        this._user_obj.fileUpload(fd).subscribe(res => {
-            console.log(res);
-        });
+        this.usersService.fileUpload(fd).subscribe(() => {});
         this.filename = this.selectedFile.name;
         }
         this.users.push(new User(this.user.name, this.user.email, this.user.password, this.user.address, this.user.work_number, this.user.personal_number, this.filename));
-        this._user_obj.updateProfileUser((this.LogginningData.user[0]['_id']) ? this.LogginningData.user[0]['_id'] : this.authService.currentUser[0]['_id'], this.users).subscribe(res => { (this.filename !== null) ? this.user.image_path = this.filename : null;
+        this.usersService.updateProfileUser((this.LogginningData.user[0]['_id']) ? this.LogginningData.user[0]['_id'] : this.authService.currentUser[0]['_id'], this.users).subscribe(() => { (this.filename !== null) ? this.user.image_path = this.filename : null;
             this.users.length = 0;
         });
     }

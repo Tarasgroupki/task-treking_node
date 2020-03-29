@@ -23,7 +23,7 @@ export class LeadsCreateComponent implements OnInit {
     ];
     loggedIn: object;
 
-    constructor(public _lead_obj: LeadsService) {
+    constructor(public leadsService: LeadsService) {
 
     }
 
@@ -31,21 +31,21 @@ export class LeadsCreateComponent implements OnInit {
         this.lead.user_created = '5d10b7aae2ebc62620959dd2';
         this.leads.push(new Lead(this.lead.title, this.lead.description, this.lead.status, this.lead.user_assigned, this.lead.client, this.lead.user_created, this.lead.contact_date));
         this.loggedIn = JSON.parse(localStorage.getItem('LoggedIn'));
-        this._lead_obj.createLead({arr: this.leads}).subscribe(res => {
+        this.leadsService.createLead({arr: this.leads}).subscribe(res => {
         this.lead = res;
         this.leads.length = 0;
     });
     }
     ngOnInit() {
-        this._lead_obj.getUsers().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.user = new Users(res[i]._id, res[i].name);
+        this.leadsService.getUsers().subscribe(resUsers => {
+            for (let i = 0; i < Object.keys(resUsers).length; i++) {
+                this.user = new Users(resUsers[i]._id, resUsers[i].name);
                 this.users.push(this.user);
             }
         });
-        this._lead_obj.getClients().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.client = new Client(res[i]._id, res[i].name);
+        this.leadsService.getClients().subscribe(resClients => {
+            for (let i = 0; i < Object.keys(resClients).length; i++) {
+                this.client = new Client(resClients[i]._id, resClients[i].name);
                 this.clients.push(this.client);
             }
         });

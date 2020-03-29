@@ -15,7 +15,7 @@ export class AuthComponent implements OnInit {
     errMessage = '';
     isLoggedIn: object;
 
-    constructor(private _router: Router, private _auth: AuthService) {
+    constructor(private router: Router, private authService: AuthService) {
         if (localStorage.getItem('errMessage')) {
             this.errMessage = 'Неправильний логін, або пароль!';
         }
@@ -23,22 +23,22 @@ export class AuthComponent implements OnInit {
 
     ngOnInit() {
         if (localStorage.getItem('LoggedIn')) {
-            this._router.navigate(['profile']);
+            this.router.navigate(['profile']);
         }
     }
     getAuth() {
         this.authenticate.push(new Auth(this.auth.email, this.auth.password));
   //      console.log(this.authenticate);
-        this._auth.getAuth(this.authenticate).subscribe(res => {
-                this.auth = res;
-              //  console.log(this.auth['permissions']);
-              this._auth.currentUser.next(this.auth['user']);
-              this._auth.permissions.next(this.auth['permissions']);
+        this.authService.getAuth(this.authenticate).subscribe(resAuth => {
+                this.auth = resAuth;
+
+              this.authService.currentUser.next(this.auth['user']);
+              this.authService.permissions.next(this.auth['permissions']);
                 localStorage.setItem('LoggedIn', JSON.stringify(this.auth));
                 localStorage.setItem('token', this.auth['token']);
                 localStorage.removeItem('errMessage');
                 console.log(JSON.parse(localStorage.getItem('LoggedIn')));
-              this._router.navigate(['clients']);
+              this.router.navigate(['clients']);
             console.log(this.errMessage);
         }, (err) => {
           localStorage.setItem('errMessage', 'true');

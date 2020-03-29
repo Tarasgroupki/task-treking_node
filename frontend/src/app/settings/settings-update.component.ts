@@ -13,51 +13,51 @@ export class SettingsUpdateComponent implements OnInit {
     role: any = new Roles('');
     roles: Roles[] = [];
     permissions: object;
-    checked_permissions: object;
-    selected_checkbox = [];
-    unselected_checkbox = [];
-    role_perm = [];
+    checkedPermissions: object;
+    selectedCheckbox = [];
+    unselectedCheckbox = [];
+    rolePerm = [];
 
-    constructor(public _setting_obj: SettingsService, private route: ActivatedRoute) {
+    constructor(public settingsService: SettingsService, private route: ActivatedRoute) {
 
     }
     updateRole() {
-        this._setting_obj.getRoleByName(this.role.name).subscribe(resRoleByName => {
+        this.settingsService.getRoleByName(this.role.name).subscribe(resRoleByName => {
             this.roles.push(this.role.name);
-            this.role_perm.push(this.selected_checkbox, this.unselected_checkbox, this.roles);
-            this._setting_obj.updateRole(resRoleByName[0]['_id'], this.role_perm).subscribe(resRole => {
+            this.rolePerm.push(this.selectedCheckbox, this.unselectedCheckbox, this.roles);
+            this.settingsService.updateRole(resRoleByName[0]['_id'], this.rolePerm).subscribe(resRole => {
                 this.role = resRole;
             });
         });
     }
     ngOnInit() {
-        this.route.params.subscribe( params => this._setting_obj.showRole(params['id']).subscribe(resRole => {
+        this.route.params.subscribe( params => this.settingsService.showRole(params['id']).subscribe(resRole => {
             this.role = new Roles(resRole[0]['name']);
             this.id = params['id'];
         }));
-        this._setting_obj.getPermissions().subscribe(resPermissions => {
+        this.settingsService.getPermissions().subscribe(resPermissions => {
             this.permissions = resPermissions;
         });
-        this.route.params.subscribe( params => this._setting_obj.getOnePermission(params['id']).subscribe(resPermission => {
+        this.route.params.subscribe( params => this.settingsService.getOnePermission(params['id']).subscribe(resPermission => {
             this.id = params['id'];
-                this.checked_permissions = resPermission;
+                this.checkedPermissions = resPermission;
         }));
     }
     onCkeckboxSelected(value) {
-        if (this.selected_checkbox.indexOf( value ) !== -1) {
-            this.selected_checkbox.splice(this.selected_checkbox.indexOf( value ), 1);
+        if (this.selectedCheckbox.indexOf( value ) !== -1) {
+            this.selectedCheckbox.splice(this.selectedCheckbox.indexOf( value ), 1);
         } else {
-            this.selected_checkbox.push(value);
+            this.selectedCheckbox.push(value);
         }
-        console.log(this.selected_checkbox);
+        console.log(this.selectedCheckbox);
     }
     onCkeckboxUnSelected(value) {
-        if (this.unselected_checkbox.indexOf( value ) !== -1) {
-            this.unselected_checkbox.splice(this.unselected_checkbox.indexOf( value ), 1);
+        if (this.unselectedCheckbox.indexOf( value ) !== -1) {
+            this.unselectedCheckbox.splice(this.unselectedCheckbox.indexOf( value ), 1);
         } else {
-            this.unselected_checkbox.push(value);
+            this.unselectedCheckbox.push(value);
         }
-        console.log(this.unselected_checkbox);
+        console.log(this.unselectedCheckbox);
     }
 
 }

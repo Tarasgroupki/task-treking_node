@@ -248,7 +248,6 @@ import { TokenInterceptorService } from './token-interceptor.service';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialModule
-  //  AppRoutingModule
   ],
   providers: [ApiService, ClientsService, TasksService, LeadsService, UsersService, AuthService, SettingsService, GraphService, SprintsService,
     {

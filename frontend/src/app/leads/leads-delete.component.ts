@@ -12,23 +12,12 @@ export class LeadsDeleteComponent {
     title = 'app';
     lead: object;
 
-    constructor(private _lead: LeadsService, private route: ActivatedRoute, private router: Router) {
-        this.route.params.subscribe( params => this._lead.deleteLead(params['id']).subscribe(res => {
-            this.lead = res;
+    constructor(private leadsService: LeadsService, private route: ActivatedRoute, private router: Router) {
+        this.route.params.subscribe( params => this.leadsService.deleteLead(params['id']).subscribe(resLead => {
+            this.lead = resLead;
             this.router.navigate(['leads']);
             //  console.log(res);
         }) );
     }
-
-  /*  ngOnInit() {
-        this._client.showClient().subscribe(res => {
-            this.client = res;
-          //  console.log(res);
-        });*/
-    /*ngOnInit() {
-        this._clients.getClients().subscribe(res => {
-            this.clients = res;
-        });
-    }*/
 
 }

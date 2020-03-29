@@ -10,21 +10,21 @@ import { Roles } from './settings.model';
 export class SettingsCreateComponent implements OnInit {
     role: any = new Roles('');
     roles: Roles[] = [];
-    selected_checkbox = [];
-    role_perm = [];
+    selectedCheckbox = [];
+    rolePerm = [];
     permissions: object;
 
-    constructor(public _setting_obj: SettingsService) {
+    constructor(public settingsService: SettingsService) {
 
     }
     addRole() {
         this.roles.push(new Roles(this.role.name));
-        this._setting_obj.createRole(this.roles).subscribe(resRole => {
-            this._setting_obj.getRoleByName(this.role.name).subscribe(resRoleByName => {
-                for (let i = 0; i < this.selected_checkbox.length; i++) {
-                    this.role_perm.push([resRoleByName[0]['_id'], this.selected_checkbox[i]]);
+        this.settingsService.createRole(this.roles).subscribe(resRole => {
+            this.settingsService.getRoleByName(this.role.name).subscribe(resRoleByName => {
+                for (let i = 0; i < this.selectedCheckbox.length; i++) {
+                    this.rolePerm.push([resRoleByName[0]['_id'], this.selectedCheckbox[i]]);
                 }
-                this._setting_obj.createRole_has_perm(this.role_perm).subscribe(resRoleHasPerm => {
+                this.settingsService.createRole_has_perm(this.rolePerm).subscribe(resRoleHasPerm => {
                     this.role = resRoleHasPerm;
                 });
             });
@@ -32,15 +32,15 @@ export class SettingsCreateComponent implements OnInit {
 
     }
     ngOnInit() {
-        this._setting_obj.getPermissions().subscribe(resPermissions => {
+        this.settingsService.getPermissions().subscribe(resPermissions => {
             this.permissions = resPermissions;
         });
     }
     onCkeckboxSelected(value) {
-        if (this.selected_checkbox.indexOf( value ) !== -1) {
-            this.selected_checkbox.splice(this.selected_checkbox.indexOf( value ), 1);
+        if (this.selectedCheckbox.indexOf( value ) !== -1) {
+            this.selectedCheckbox.splice(this.selectedCheckbox.indexOf( value ), 1);
         } else {
-            this.selected_checkbox.push(value);
+            this.selectedCheckbox.push(value);
         }
     }
 

@@ -11,10 +11,10 @@ export class SprintsComponent implements OnInit {
     sprints: object;
     displayedColumns = ['id', 'title', 'description', 'status', 'lead_assigned', 'user_created', 'deadline', 'created_at'];
 
-    constructor(private _sprints: SprintsService) {}
+    constructor(private sprintsService: SprintsService) {}
 
     ngOnInit() {
-        this._sprints.getSprints().subscribe(resSprints => {
+        this.sprintsService.getSprints().subscribe(resSprints => {
             this.sprints = resSprints;
             for (const i of Object.keys(this.sprints)) {
                 if (this.sprints[i].status === 2) {
@@ -24,10 +24,10 @@ export class SprintsComponent implements OnInit {
                 } else {
                     this.sprints[i].status = 'Не виконується';
                 }
-                this._sprints.getUserById(this.sprints[i].user_created).subscribe( resUser => {
+                this.sprintsService.getUserById(this.sprints[i].user_created).subscribe( resUser => {
                     this.sprints[i].user_created = resUser['name'];
                 });
-                this._sprints.getLeadById(this.sprints[i].lead_assigned).subscribe( resLead => {
+                this.sprintsService.getLeadById(this.sprints[i].lead_assigned).subscribe( resLead => {
                     this.sprints[i].lead_assigned = resLead['title'];
                 });
             }

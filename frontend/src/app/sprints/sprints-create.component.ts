@@ -22,30 +22,28 @@ export class SprintsCreateComponent implements OnInit {
     users = [];
     lead: any = new Leads('', '');
     leads = [];
-   // dateObj: object;
-   // dateString: string;
 
-    constructor(public _sprint_obj: SprintsService) {
+    constructor(public sprintsService: SprintsService) {
 
     }
 
     addSprint() {
         this.sprints.push(new Sprint(this.sprint.title, this.sprint.description, this.sprint.status, this.sprint.lead_assigned, this.sprint.user_created, this.sprint.deadline));
-        this._sprint_obj.createSprint(this.sprints).subscribe(res => {
-        this.sprint = res;
+        this.sprintsService.createSprint(this.sprints).subscribe(resSprint => {
+        this.sprint = resSprint;
         this.sprints.length = 0;
     });
     }
     ngOnInit() {
-        this._sprint_obj.getUsers().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.user = new Users(res[i]._id, res[i].name);
+        this.sprintsService.getUsers().subscribe(resUsers => {
+            for (let i = 0; i < Object.keys(resUsers).length; i++) {
+                this.user = new Users(resUsers[i]._id, resUsers[i].name);
                 this.users.push(this.user);
             }
         });
-        this._sprint_obj.getLeads().subscribe(res => {
-            for (let i = 0; i < Object.keys(res).length; i++) {
-                this.lead = new Leads(res[i]._id, res[i].title);
+        this.sprintsService.getLeads().subscribe(resLeads => {
+            for (let i = 0; i < Object.keys(resLeads).length; i++) {
+                this.lead = new Leads(resLeads[i]._id, resLeads[i].title);
                 this.leads.push(this.lead);
             }
         });

@@ -11,12 +11,12 @@ export class SettingsComponent implements OnInit {
     roles: object;
     displayedColumns = ['id', 'name', '_v'];
 
-    constructor(private _roles: SettingsService) {}
+    constructor(private settingsService: SettingsService) {}
 
     ngOnInit() {
-        this._roles.getRoles().subscribe(res => {
-            this.roles = res;
-            console.log(res);
+        this.settingsService.getRoles().subscribe(resRoles => {
+            this.roles = resRoles;
+            console.log(resRoles);
         });
     }
 

@@ -12,12 +12,11 @@ export class ClientsComponent implements OnInit {
     public LogginningData = JSON.parse(localStorage.getItem('LoggedIn'));
     displayedColumns = ['id', 'name', 'email', 'primary_number', 'secondary_number', 'address', 'zipcode', 'city', 'company_name', 'industry'];
 
-    constructor(private _clients: ClientsService) {}
+    constructor(private clientsService: ClientsService) {}
 
     ngOnInit() {
-        this._clients.getClients().subscribe(res => {
-            this.clients = res;
-            console.log(res);
+        this.clientsService.getClients().subscribe(resClients => {
+            this.clients = resClients;
         });
     }
 
