@@ -17,8 +17,15 @@ export class AuthService {
             })
         }).map(result => result);
     }
+
     logoutAuth(id: number) {
        return this._http.get('http://localhost:8080/public/api/users/logout/' + id + '').map(result => result);
+    }
+
+    isAuthenticated(): boolean {
+      const token = localStorage.getItem('token');
+
+      return !!token;
     }
 
 }

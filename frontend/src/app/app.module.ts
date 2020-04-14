@@ -55,6 +55,7 @@ import {SprintsService} from './sprints/sprints.service';
 import {NotFoundComponent} from './not-found/not-found.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptorService } from './token-interceptor.service';
+import {AuthGuard} from './auth/auth.guard';
 
 
 @NgModule({
@@ -103,89 +104,110 @@ import { TokenInterceptorService } from './token-interceptor.service';
     RouterModule.forRoot([
         {
             path: 'clients',
-            component: ClientsComponent
+            component: ClientsComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'clients/create',
-            component: ClientsCreateComponent
+            component: ClientsCreateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'clients/:id',
-            component: ClientsViewComponent
+            component: ClientsViewComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'clients/add/:id',
-            component: ClientsUpdateComponent
+            component: ClientsUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'clients/delete/:id',
-            component: ClientsDeleteComponent
+            component: ClientsDeleteComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'tasks',
-            component: TasksComponent
+            component: TasksComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'tasks/:id',
-            component: TasksViewComponent
+            component: TasksViewComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'task/create',
-            component: TasksCreateComponent
+            component: TasksCreateComponent,
+            canActivate: [AuthGuard]
         },
 
         {
             path: 'tasks/add/:id',
-            component: TasksUpdateComponent
+            component: TasksUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'tasks/delete/:id',
-            component: TasksDeleteComponent
+            component: TasksDeleteComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'leads',
-            component: LeadsComponent
+            component: LeadsComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'leads/:id',
-            component: LeadsViewComponent
+            component: LeadsViewComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'lead/create',
-            component: LeadsCreateComponent
+            component: LeadsCreateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'leads/add/:id',
-            component: LeadsUpdateComponent
+            component: LeadsUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'leads/delete/:id',
-            component: LeadsDeleteComponent
+            component: LeadsDeleteComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'users',
-            component: UsersComponent
+            component: UsersComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'users/:id',
-            component: UsersViewComponent
+            component: UsersViewComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'user/create',
-            component: UsersCreateComponent
+            component: UsersCreateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'users/add/:id',
-            component: UsersUpdateComponent
+            component: UsersUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'users/delete/:id',
-            component: UsersDeleteComponent
+            component: UsersDeleteComponent,
+            canActivate: [AuthGuard]
         },
 
         {
             path: 'users/add_role/:id',
-            component: UsersRolesComponent
+            component: UsersRolesComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'login',
@@ -193,19 +215,23 @@ import { TokenInterceptorService } from './token-interceptor.service';
         },
         {
             path: 'roles',
-            component: SettingsComponent
+            component: SettingsComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'role/create',
-            component: SettingsCreateComponent
+            component: SettingsCreateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'roles/add/:id',
-            component: SettingsUpdateComponent
+            component: SettingsUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'roles/delete/:id',
-            component: SettingsDeleteComponent
+            component: SettingsDeleteComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'logout/:id',
@@ -213,31 +239,38 @@ import { TokenInterceptorService } from './token-interceptor.service';
         },
         {
             path: 'profile',
-            component: UsersProfileComponent
+            component: UsersProfileComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'graph',
-            component: GraphComponent
+            component: GraphComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'sprints',
-            component: SprintsComponent
+            component: SprintsComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'sprints/:id',
-            component: SprintsViewComponent
+            component: SprintsViewComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'sprint/create',
-            component: SprintsCreateComponent
+            component: SprintsCreateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'sprints/add/:id',
-            component: SprintsUpdateComponent
+            component: SprintsUpdateComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: 'sprints/delete/:id',
-            component: SprintsDeleteComponent
+            component: SprintsDeleteComponent,
+            canActivate: [AuthGuard]
         },
         {
             path: '**',
@@ -249,7 +282,7 @@ import { TokenInterceptorService } from './token-interceptor.service';
     BrowserAnimationsModule,
     MaterialModule
   ],
-  providers: [ApiService, ClientsService, TasksService, LeadsService, UsersService, AuthService, SettingsService, GraphService, SprintsService,
+  providers: [ApiService, ClientsService, TasksService, LeadsService, UsersService, AuthService, SettingsService, GraphService, SprintsService, AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
