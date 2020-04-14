@@ -25,11 +25,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-      if (!localStorage.getItem('LoggedIn')) {
-          this.router.navigate(['login']);
-      }
 
-    }
+  }
+
     removeAuth() {
         localStorage.removeItem('token');
         localStorage.removeItem('LoggedIn');

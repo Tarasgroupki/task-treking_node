@@ -22,16 +22,16 @@ export class AuthComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (localStorage.getItem('LoggedIn')) {
+        if (this.authService.isAuthenticated()) {
             this.router.navigate(['profile']);
         }
     }
+
     getAuth() {
         this.authenticate.push(new Auth(this.auth.email, this.auth.password));
-  //      console.log(this.authenticate);
-        this.authService.getAuth(this.authenticate).subscribe(resAuth => {
-                this.auth = resAuth;
 
+        this.authService.getAuth(this.authenticate).subscribe(resAuth => {
+              this.auth = resAuth;
               this.authService.currentUser.next(this.auth['user']);
               this.authService.permissions.next(this.auth['permissions']);
                 localStorage.setItem('LoggedIn', JSON.stringify(this.auth));
