@@ -29,8 +29,6 @@
         <a class="links" *ngIf="permissions.indexOf( 'create-tasks' ) !== -1" routerLink="task/create" routerLinkActive="active">Добавити нове завдання</a>
         <br />
         <a class="links" *ngIf="permissions.indexOf( 'create-tasks' ) !== -1" routerLink="tasks" routerLinkActive="active">Список завдань</a>
-          <br />
-          <a class="links" *ngIf="permissions.indexOf( 'create-clients' ) !== -1" routerLink="graph" routerLinkActive="active">Діаграма виконаних завдань</a>
       </mat-expansion-panel>
       <mat-expansion-panel *ngIf="permissions.indexOf( 'create-users' ) !== -1" (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">

@@ -4,6 +4,7 @@
     <h1>AUTHORIZATION</h1>
   </div>
   <div class="main">
+  <form (submit)="getAuth()">
   <div class="form-group">
     <mat-form-field>
       <label for="email">Email</label>
@@ -29,7 +30,8 @@
     {{ errMessage }}
   </div>
   <div class="form-group">
-  <button style="border-radius: 50px 50px 50px 50px;" mat-button (click)="getAuth()" class="login">{{ 'Авторизуватися' }}</button>
+  <button style="border-radius: 50px 50px 50px 50px;" mat-button class="login">{{ 'Авторизуватися' }}</button>
   </div>
+  </form>
   </div>
 </div>

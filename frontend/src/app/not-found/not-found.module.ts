@@ -9,6 +9,7 @@ import { NotFoundComponent } from './not-found.component';
     CommonModule,
     NotFoundRoutingModule
   ],
+  exports: [NotFoundComponent],
   declarations: [NotFoundComponent]
 })
 export class NotFoundModule { }
