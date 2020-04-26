@@ -9,14 +9,12 @@ const server = new RedisServer({
   bin: '/usr/local/bin/redis-server'
 });*/
 
-const productRoutes = require("./api/routes/products");
 const clientRoutes = require("./api/routes/clients");
 const leadRoutes = require("./api/routes/leads");
 const sprintRoutes = require("./api/routes/sprints");
 const taskRoutes = require("./api/routes/tasks");
 const userRoutes = require("./api/routes/users");
 const settingRoutes = require("./api/routes/settings");
-const orderRoutes = require("./api/routes/orders");
 
 mongoose.connect(
   "mongodb://Taras:" +
@@ -53,14 +51,12 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
-app.use("/products", productRoutes);
 app.use("/clients", clientRoutes);
 app.use("/leads", leadRoutes);
 app.use("/sprints", sprintRoutes);
 app.use("/tasks", taskRoutes);
 app.use("/users", userRoutes);
 app.use("/settings", settingRoutes);
-app.use("/orders", orderRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

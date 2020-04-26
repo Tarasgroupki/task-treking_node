@@ -2,19 +2,20 @@ const jwt = require('jsonwebtoken');
 const jwtDecode = require('jwt-decode');
 
 module.exports = {
-  main(req, res, next) {
-    try {
-      const token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_KEY);
-      // const decoded1 = jwtDecode(token);
-      // console.log(decoded1.scopes);
-      req.userData = decoded;
-      return next();
-    } catch (error) {
-      return res.status(401).json({
-        message: 'Auth failed',
-      });
-    }
+  main() {
+    return (req, res, next) => {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+
+        req.userData = jwt.verify(token, process.env.JWT_KEY);
+        return next();
+      } catch (error) {
+        return res.status(401).json({
+          message: 'Auth failed',
+          error,
+        });
+      }
+    };
   },
   scope(scope) {
     return (req, res, next) => {
@@ -46,6 +47,7 @@ module.exports = {
           });
         }
       }
+      return res.status(200);
     };
   },
 };

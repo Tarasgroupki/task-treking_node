@@ -6,7 +6,7 @@
 </div>
 <div *ngIf="checkedRoles">
   <div *ngFor="let role of roles">
-  <mat-checkbox  *ngIf="checkedRoles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
+   <mat-checkbox  *ngIf="checkedRoles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "true" (change)="onCkeckboxUnSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
    <mat-checkbox  *ngIf="!checkedRoles[role['_id']]" name="roles[]" [value]="role['_id']" [checked]= "false" (change)="onCkeckboxSelected($event.source.value)">{{ role['name'] }}</mat-checkbox>
   </div>
 </div>

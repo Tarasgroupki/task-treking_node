@@ -22,26 +22,33 @@ export class SettingsUpdateComponent implements OnInit {
 
     }
     updateRole() {
+      this.roles.push(this.role.name);
         this.settingsService.getRoleByName(this.role.name).subscribe(resRoleByName => {
-            this.roles.push(this.role.name);
             this.rolePerm.push(this.selectedCheckbox, this.unselectedCheckbox, this.roles);
-            this.settingsService.updateRole(resRoleByName[0]['_id'], this.rolePerm).subscribe(resRole => {
-                this.role = resRole;
+            this.settingsService.updateRole(resRoleByName[0]['_id'], this.rolePerm).subscribe(() => {
+                this.role.length = 0;
+                this.rolePerm.length = 0;
+                this.selectedCheckbox.length = 0;
+                this.unselectedCheckbox.length = 0;
+                this.getCheckedPermissions();
             });
         });
     }
     ngOnInit() {
         this.route.params.subscribe( params => this.settingsService.showRole(params['id']).subscribe(resRole => {
-            this.role = new Roles(resRole[0]['name']);
+            this.role = new Roles(resRole['name']);
             this.id = params['id'];
         }));
         this.settingsService.getPermissions().subscribe(resPermissions => {
             this.permissions = resPermissions;
         });
-        this.route.params.subscribe( params => this.settingsService.getOnePermission(params['id']).subscribe(resPermission => {
-            this.id = params['id'];
-                this.checkedPermissions = resPermission;
-        }));
+        this.getCheckedPermissions();
+    }
+    getCheckedPermissions() {
+       this.route.params.subscribe( params => this.settingsService.getOnePermission(params['id']).subscribe(resPermission => {
+         this.id = params['id'];
+         this.checkedPermissions = resPermission;
+       }));
     }
     onCkeckboxSelected(value) {
         if (this.selectedCheckbox.indexOf( value ) !== -1) {
@@ -49,7 +56,6 @@ export class SettingsUpdateComponent implements OnInit {
         } else {
             this.selectedCheckbox.push(value);
         }
-        console.log(this.selectedCheckbox);
     }
     onCkeckboxUnSelected(value) {
         if (this.unselectedCheckbox.indexOf( value ) !== -1) {
@@ -57,7 +63,6 @@ export class SettingsUpdateComponent implements OnInit {
         } else {
             this.unselectedCheckbox.push(value);
         }
-        console.log(this.unselectedCheckbox);
     }
 
 }

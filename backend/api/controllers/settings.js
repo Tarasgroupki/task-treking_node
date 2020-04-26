@@ -1,207 +1,130 @@
-const mongoose = require('mongoose');
+const settingsService = require('../service/settings');
 
-const Permission = require('../models/permission');
-const RoleHasPermission = require('../models/role_has_permission');
-const Role = require('../models/role');
-
-exports.permissions_get_all = (req, res) => {
-  Permission.find()
-    .exec()
-    .then((docs) => {
-      res.status(200).json(docs);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
+exports.permissions_get_all = async (req, res) => {
+  try {
+    const permissions = await settingsService.getPermissions();
+    return res.status(200).json(permissions);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 };
 
-exports.permissions_create_permission = (req, res) => {
-  const permission = new Permission({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-  });
-  permission
-    .save()
-    .then((result) => {
-      res.status(201).json({
-        message: 'Handling POST requests to /sprints',
-        createdPermission: result,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
+exports.roles_get_all = async (req, res) => {
+  try {
+    const roles = await settingsService.getRoles();
+    return res.status(200).json(roles);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 };
 
-exports.roles_get_all = (req, res) => {
-  Role.find()
-    .exec()
-    .then((docs) => {
-      res.status(200).json(docs);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
-};
-
-exports.roles_get_one_by_id = (req, res) => {
+exports.roles_get_one_by_id = async (req, res) => {
   const id = req.params.roleId;
-  Role.find({ _id: id })
-    .exec()
-    .then((docs) => {
-      res.status(200).json(docs);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
+  try {
+    const role = await settingsService.getRoleById(id);
+    return res.status(200).json(role);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 };
 
-exports.roles_get_one_by_name = (req, res) => {
+exports.roles_get_one_by_name = async (req, res) => {
   const name = req.params.roleName;
-  Role.find({ name })
-    .exec()
-    .then((docs) => {
-      res.status(200).json(docs);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
-};
-
-exports.roles_create_roles = (req, res) => {
-  const role = new Role({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body[0].name,
-  });
-  role
-    .save()
-    .then((result) => {
-      res.status(201).json({
-        message: 'Handling POST requests to /sprints',
-        createdRole: result,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
-};
-
-exports.roles_edit_role = (req, res) => {
-  const id = req.params.roleId;
-  const updateOps = {};
-  /* for (const ops of req.body) {
-    updateOps[ops.propName] = ops.value;
-  } */
-  req.body.forEach((item) => {
-    updateOps[item.propName] = item.value;
-  });
-  // console.log(req.body[2]);
-  Role.update({ _id: id }, { $set: req.body[2] })
-    .exec()
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
-  for (let i = 0; i < req.body[0].length; i++) {
-    const roleHasPermission = new RoleHasPermission({
-      permission: req.body[0][i],
-      role: id,
-    });
-    roleHasPermission
-      .save()
-      .then((result) => result)
-      .catch((err) => {
-        res.status(500).json({
-          error: err,
-        });
-      });
-  }
-  for (let i = 0; i < req.body[1].length; i++) {
-    RoleHasPermission.remove({ permission: req.body[1][i] })
-      .exec()
-      .then((result) => result)
-      .catch((err) => {
-        res.status(500).json({
-          error: err,
-        });
-      });
+  try {
+    const role = await settingsService.getRoleByName(name);
+    return res.status(200).json(role);
+  } catch (err) {
+    return res.status(500).json({ error: err });
   }
 };
 
-exports.roles_delete_role = (req, res) => {
+exports.roles_create_roles = async (req, res) => {
+  try {
+    const result = await settingsService.createRole(req);
+    return res.status(201).json({
+      message: 'Handling POST requests to /roles',
+      createdClient: result,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: err,
+    });
+  }
+};
+
+exports.roles_edit_role = async (req, res) => {
   const id = req.params.roleId;
-  Role.remove({ _id: id })
-    .exec()
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+  const roleHasPermission = [];
+  try {
+    const result = await settingsService.updateRole(id, req.body[2]);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({
+      error: err,
     });
+  }
+  req.body[0].forEach((item) => {
+    roleHasPermission.push({ role: id, permission: item });
+  });
+  try {
+    await settingsService.createRoleHasPermissions(roleHasPermission);
+  } catch (err) {
+    res.status(500).json({
+      error: err,
+    });
+  }
+  try {
+    await settingsService.deleteRoleHasPermissions(id, req.body[1]);
+  } catch (err) {
+    res.status(500).json({
+      error: err,
+    });
+  }
 };
 
-exports.get_all_roles_has_permission = (req, res) => {
-  RoleHasPermission.find()
-    .exec()
-    .then((docs) => {
-      res.status(200).json(docs);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+exports.roles_delete_role = async (req, res) => {
+  const id = req.params.roleId;
+  try {
+    const role = await settingsService.deleteRole(id);
+    return res.status(200).json(role);
+  } catch (err) {
+    return res.status(500).json({
+      error: err,
     });
+  }
 };
 
-exports.get_one_roles_has_permission = (req, res) => {
+exports.get_all_roles_has_permission = async (req, res) => {
+  try {
+    const rolesHasPermissions = await settingsService.getAllRoleHasPermissions();
+    return res.status(200).json(rolesHasPermissions);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+};
+
+exports.get_one_roles_has_permission = async (req, res) => {
   const id = req.params.roleId;
   const permissions = {};
-  RoleHasPermission.find({ role: id })
-    .exec()
-    .then((docs) => {
-      for (let i = 0; i < docs.length; i++) {
-        permissions[docs[i].permission] = docs[i];
-      } // console.log(permissions);
-      res.status(200).json(permissions);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
-    });
+  const roleHasPermission = await settingsService.getOneRoleHasPermissions(id);
+  for (let i = 0; i < roleHasPermission.length; i++) {
+    permissions[roleHasPermission[i].permission] = roleHasPermission[i];
+  }
+  return res.status(200).json(permissions);
 };
 
-exports.roles_create_roles_has_permission = (req, res) => {
-  for (let i = 0; i < req.body.length; i++) {
-    const roleHasPermission = new RoleHasPermission({
-      permission: req.body[i][1],
-      role: req.body[i][0],
+exports.roles_create_roles_has_permission = async (req, res) => {
+  const roleHasPermission = [];
+  req.body.forEach((item) => {
+    roleHasPermission.push({ role: item[0], permission: item[1] });
+  });
+
+  try {
+    await settingsService.createRoleHasPermissions(roleHasPermission);
+    res.status(200);
+  } catch (err) {
+    res.status(500).json({
+      error: err,
     });
-    roleHasPermission
-      .save()
-      .then((result) => result)
-      .catch((err) => {
-        res.status(500).json({
-          error: err,
-        });
-      });
   }
 };
