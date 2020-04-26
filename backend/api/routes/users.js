@@ -8,6 +8,11 @@ const checkAuth = require('../middleware/check-auth');
 
 const UsersController = require('../controllers/users');
 
+const checkUserCreate = checkAuth.scope('create-users');
+const checkUserEdit = checkAuth.scope('edit-users');
+const checkUserDelete = checkAuth.scope('delete-users');
+const checkUserCreateAndEdit = checkAuth.scopes('create-users,edit-users');
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, './uploads/');
@@ -34,22 +39,22 @@ const upload = multer({
   fileFilter,
 });
 
-router.get('/', checkAuth.main, UsersController.users_get_all);
+router.get('/', checkUserCreateAndEdit, UsersController.users_get_all);
 
-router.post('/', checkAuth.main, UsersController.users_create_user);
+router.post('/', checkUserCreate, UsersController.users_create_user);
 
-router.get('/:userId', checkAuth.main, UsersController.users_get_one);
+router.get('/:userId', checkUserCreate, UsersController.users_get_one);
 
 router.post('/file/fileUpload', upload.single('image_path'), UsersController.users_file_upload);
 
-router.patch('/profile/:userId', checkAuth.main, upload.single('image_path'), UsersController.users_profile_user);
+router.patch('/profile/:userId', checkUserEdit, upload.single('image_path'), UsersController.users_profile_user);
 
 
-router.put('/:userId', checkAuth.main, UsersController.users_edit_user);
+router.put('/:userId', checkUserEdit, UsersController.users_edit_user);
 
 router.post('/login', UsersController.users_login);
 
-router.delete('/:userId', checkAuth.main, UsersController.users_delete_user);
+router.delete('/:userId', checkUserDelete, UsersController.users_delete_user);
 
 router.get('/user/user_has_role', UsersController.users_user_has_role);
 

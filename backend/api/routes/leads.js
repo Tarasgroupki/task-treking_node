@@ -6,14 +6,19 @@ const checkAuth = require('../middleware/check-auth');
 
 const LeadsController = require('../controllers/leads');
 
-router.get('/', checkAuth.main, LeadsController.leads_get_all);
+const checkLeadCreate = checkAuth.scope('create-leads');
+const checkLeadEdit = checkAuth.scope('edit-leads');
+const checkClientDelete = checkAuth.scope('delete-leads');
+const checkClientCreateAndEdit = checkAuth.scopes('create-leads,edit-leads');
 
-router.post('/', checkAuth.main, LeadsController.leads_create_lead);
+router.get('/', checkClientCreateAndEdit, LeadsController.leads_get_all);
 
-router.get('/:leadId', checkAuth.main, LeadsController.leads_get_one);
+router.post('/', checkLeadCreate, LeadsController.leads_create_lead);
 
-router.put('/:leadId', checkAuth.main, LeadsController.leads_edit_lead);
+router.get('/:leadId', checkLeadCreate, LeadsController.leads_get_one);
 
-router.delete('/:leadId', checkAuth.main, LeadsController.leads_delete_lead);
+router.put('/:leadId', checkLeadEdit, LeadsController.leads_edit_lead);
+
+router.delete('/:leadId', checkClientDelete, LeadsController.leads_delete_lead);
 
 module.exports = router;

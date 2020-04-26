@@ -6,14 +6,19 @@ const checkAuth = require('../middleware/check-auth');
 
 const ClientsController = require('../controllers/clients');
 
-router.get('/', checkAuth.main, ClientsController.clients_get_all);
+const checkClientCreate = checkAuth.scope('create-clients');
+const checkClientEdit = checkAuth.scope('edit-clients');
+const checkClientDelete = checkAuth.scope('delete-clients');
+const checkClientCreateAndEdit = checkAuth.scopes('create-clients,edit-clients');
 
-router.post('/', checkAuth.main, ClientsController.clients_create_client);
+router.get('/', checkClientCreateAndEdit, ClientsController.clients_get_all);
 
-router.get('/:clientId', checkAuth.main, ClientsController.clients_get_one);
+router.post('/', checkClientCreate, ClientsController.clients_create_client);
 
-router.patch('/:clientId', checkAuth.main, ClientsController.clients_edit_client);
+router.get('/:clientId', checkClientCreate, ClientsController.clients_get_one);
 
-router.delete('/:clientId', checkAuth.main, ClientsController.clients_delete_client);
+router.patch('/:clientId', checkClientEdit, ClientsController.clients_edit_client);
+
+router.delete('/:clientId', checkClientDelete, ClientsController.clients_delete_client);
 
 module.exports = router;

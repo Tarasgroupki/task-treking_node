@@ -29,7 +29,7 @@ export class LeadsUpdateComponent implements OnInit {
 
     ngOnInit() {
     this.route.params.subscribe( params => this.leadsService.showLead(params['id']).subscribe(resLead => {
-        this.date = new Date(resLead['contact_date']);
+    this.date = new Date(resLead['contact_date']);
     this.lead = new Lead(resLead['title'], resLead['description'], resLead['status'], resLead['user_assigned'], resLead['client'], resLead['user_created'], this.date);
     this.id = params['id'];
      this.leadsService.getUsers().subscribe(resUsers => {
