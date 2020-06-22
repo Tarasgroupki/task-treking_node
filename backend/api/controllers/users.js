@@ -130,39 +130,39 @@ exports.users_file_upload = (req, res) => {
 
 exports.users_login = async (req, res) => {
   const user = await usersService.getUserByEmail(req.body[0].email);
-  const userHasRole = await usersService.getUserHasRolesById(user[0]._id);
-  const roleHasPermissions = await settingsService.getOneRoleHasPermissions(userHasRole[0].role);
-  const roles = await settingsService.getRoleById(userHasRole[0].role);
-  const perms = [];
-  roleHasPermissions.forEach((item) => {
-    perms.push(item.permission);
-  });
-  const permissions = await settingsService.getPermsOfRole(perms);
-  const rolesArr = [];
-  // const permissionNames = [];
-  const permissionSlugs = [];
-  if (roles.length > 0) {
-    roles.forEach((item) => {
-      rolesArr.push(item.name);
+  if (user[0]) {
+    const userHasRole = await usersService.getUserHasRolesById(user[0]._id);
+    const roleHasPermissions = await settingsService.getOneRoleHasPermissions(userHasRole[0].role);
+    const roles = await settingsService.getRoleById(userHasRole[0].role);
+    const perms = [];
+    roleHasPermissions.forEach((item) => {
+      perms.push(item.permission);
     });
-  } else {
-    rolesArr.push(roles.name);
-  }
-  permissions.forEach((item) => {
-  //  permissionNames.push(item.name);
-    permissionSlugs.push(item.name.replace(' ', '-'));
-  });
-  if (user) {
+    const permissions = await settingsService.getPermsOfRole(perms);
+    const rolesArr = [];
+    // const permissionNames = [];
+    const permissionSlugs = [];
+    if (roles.length > 0) {
+      roles.forEach((item) => {
+        rolesArr.push(item.name);
+      });
+    } else {
+      rolesArr.push(roles.name);
+    }
+    permissions.forEach((item) => {
+      //  permissionNames.push(item.name);
+      permissionSlugs.push(item.name.replace(' ', '-'));
+    });
     const token = jwt.sign(
-      {
-        email: user[0].email,
-        userId: user[0]._id,
-        scopes: permissionSlugs.toString(),
-      },
-      'twa1kkEyjkhbybkju',
-      {
-        expiresIn: '10h',
-      },
+        {
+          email: user[0].email,
+          userId: user[0]._id,
+          scopes: permissionSlugs.toString(),
+        },
+        'twa1kkEyjkhbybkju',
+        {
+          expiresIn: '10h',
+        },
     );
     return res.status(200).json({
       message: 'Auth successful',
