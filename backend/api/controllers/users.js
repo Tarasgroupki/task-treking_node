@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const redis = require('redis');
-const checkAuth = require('../middleware/check-auth');
 
 const usersService = require('../service/users');
 const settingsService = require('../service/settings');
@@ -10,25 +9,20 @@ const settingsService = require('../service/settings');
 const clientRed = redis.createClient(6379, '127.0.0.1');
 
 exports.users_get_all = (req, res) => {
-  if (checkAuth.scopes('create-users,edit-users')) {
     clientRed.get('allusers', async (reply) => {
       if (reply) {
         let replyJson = JSON.parse(reply);
-        // for (const value of Object.values(replyJson)) {
         replyJson.forEach((value) => {
           value.password = null;
         });
-        // }
         replyJson = JSON.stringify(reply);
         res.send(replyJson);
       } else {
         try {
           const users = await usersService.getUsers();
-          // for (const value of Object.values(users)) {
           users.forEach((value) => {
             value.password = null;
           });
-          //  }
           res.status(200).json(users);
         } catch (err) {
           res.status(500).json({
@@ -37,7 +31,6 @@ exports.users_get_all = (req, res) => {
         }
       }
     });
-  }
 };
 
 exports.users_create_user = async (req, res) => {
