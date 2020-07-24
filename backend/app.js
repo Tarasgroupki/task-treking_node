@@ -3,6 +3,9 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const redis = require('redis');
+
+const clientRed = redis.createClient(6379, '127.0.0.1');
 /*const RedisServer = require('redis-server');
 const server = new RedisServer({
   port: 6379,
