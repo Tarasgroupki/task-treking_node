@@ -7,8 +7,8 @@ const multer = require('multer');
 
 const checkAuth = require('../middleware/check-auth');
 
-const usersService = require('../service/users');
-const settingsService = require('../service/settings');
+const usersService = require('../services/users');
+const settingsService = require('../services/settings');
 
 const clientRed = require('../redis-connection');
 

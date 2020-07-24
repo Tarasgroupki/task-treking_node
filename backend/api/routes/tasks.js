@@ -4,8 +4,8 @@ const router = express.Router();
 
 const checkAuth = require('../middleware/check-auth');
 
-const tasksService = require('../service/tasks');
-const votesService = require('../service/votes');
+const tasksService = require('../services/tasks');
+const votesService = require('../services/votes');
 const clientRed = require('../redis-connection');
 
 const checkTasksCreate = checkAuth.scope('create-tasks');

@@ -4,7 +4,7 @@ const router = express.Router();
 
 const checkAuth = require('../middleware/check-auth');
 
-const settingsService = require('../service/settings');
+const settingsService = require('../services/settings');
 
 router.get('/permissions', async (req, res) => {
   try {
@@ -14,8 +14,6 @@ router.get('/permissions', async (req, res) => {
     return res.status(500).json({ error: err });
   }
 });
-
-// router.post('/permissions', SettingsController.permissions_create_permission);
 
 router.get('/roles', checkAuth.main(), async (req, res) => {
   try {

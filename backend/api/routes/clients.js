@@ -6,7 +6,7 @@ const clientRed = require('../redis-connection');
 
 const checkAuth = require('../middleware/check-auth');
 
-const clientsService = require('../service/clients');
+const clientsService = require('../services/clients');
 
 const checkClientCreate = checkAuth.scope('create-clients');
 const checkClientEdit = checkAuth.scope('edit-clients');
