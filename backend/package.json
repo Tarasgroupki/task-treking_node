@@ -29,7 +29,8 @@
     "redis": "^2.8.0",
     "redis-server": "^1.2.2",
     "rootpath": "^0.1.2",
-    "secret-key": "^1.4.2"
+    "secret-key": "^1.4.2",
+    "validatorjs": "^3.18.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
