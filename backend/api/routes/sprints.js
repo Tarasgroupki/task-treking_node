@@ -1,12 +1,16 @@
 const express = require('express');
 
+const mongoose = require('mongoose');
+
 const router = express.Router();
+
+const Validator = require('validatorjs');
 
 const checkAuth = require('../middleware/check-auth');
 
-const sprintsService = require('../services/sprints');
-const tasksService = require('../services/tasks');
-const votesService = require('../services/votes');
+const Sprint = require('../models/sprint');
+const Task = require('../models/task');
+const Vote = require('../models/vote');
 
 const clientRed = require('../redis-connection');
 
@@ -15,13 +19,23 @@ const checkSprintEdit = checkAuth.scope('edit-sprints');
 const checkSprintDelete = checkAuth.scope('delete-sprints');
 const checkSprintCreateAndEdit = checkAuth.scopes('create-sprints,edit-sprints');
 
+const rules = {
+  title: 'string',
+  description: 'string',
+  status: 'numeric',
+  lead_assigned: 'string',
+  user_created: 'string',
+  deadline: 'string',
+  created_at: 'string',
+};
+
 router.get('/', checkSprintCreateAndEdit, (req, res) => {
   clientRed.get('allsprints', async (reply) => {
     if (reply) {
       return res.send(reply);
     }
     try {
-      const sprints = await sprintsService.getSprints();
+      const sprints = await Sprint.find();
       clientRed.set('allsprints', JSON.stringify(sprints));
       return res.status(200).json(sprints);
     } catch (err) {
@@ -32,7 +46,16 @@ router.get('/', checkSprintCreateAndEdit, (req, res) => {
 
 router.post('/', checkSprintCreate, async (req, res) => {
   try {
-    const result = await sprintsService.createSprint(req);
+    const result = await new Sprint({
+      _id: new mongoose.Types.ObjectId(),
+      title: req.body[0].title,
+      description: req.body[0].description,
+      status: req.body[0].status,
+      lead_assigned: req.body[0].lead_assigned,
+      user_created: req.body[0].user_created,
+      deadline: req.body[0].deadline,
+      created_at: new Date(Date.now()).toISOString(),
+    }).save();
     clientRed.del('allsprints');
     return res.status(201).json({
       message: 'Handling POST requests to /sprints',
@@ -63,8 +86,8 @@ router.get('/get_points/:sprintId', async (req, res) => {
   let lastDay = 0;
 
   try {
-    const sprint = await sprintsService.getSprint(id);
-    const tasks = await tasksService.getTasksBySprint(sprint._id);
+    const sprint = await Sprint.findById(id);
+    const tasks = await Task.find({ sprint_assigned: id });
     marks[0] = [];
     marks[0][0] = 250;
     for (let i = 0; i < tasks.length; i++) {
@@ -73,7 +96,7 @@ router.get('/get_points/:sprintId', async (req, res) => {
         dates.push(Math.round(((new Date(tasks[i].deadline) - new Date(tasks[i].created_at)) / 86400) / (60 * 24)));
       }
       centMark[i] = 0;
-      votes[i] = await votesService.getVoteByTask(tasks[i]._id);
+      votes[i] = await Vote.find({ task_assigned: tasks[i]._id });
       for (let j = 0; j < votes[i].length; j++) {
         centMark[i] += votes[i][j].mark;
       }
@@ -132,7 +155,7 @@ router.get('/get_points/:sprintId', async (req, res) => {
 router.get('/:sprintId', checkSprintCreate, async (req, res) => {
   const id = req.params.sprintId;
   try {
-    const sprint = await sprintsService.getSprint(id);
+    const sprint = await Sprint.findById(id);
     return res.status(200).json(sprint);
   } catch (err) {
     return res.status(500).json({ error: err });
@@ -142,11 +165,24 @@ router.get('/:sprintId', checkSprintCreate, async (req, res) => {
 router.patch('/:sprintId', checkSprintEdit, async (req, res) => {
   const id = req.params.sprintId;
   try {
-    const result = await sprintsService.updateSprint(id, req.body[0]);
-    if (req.body[0].status === 2) {
-      await tasksService.updateTasks(id);
+    const validator = new Validator(req.body[0], rules);
+
+    if (!validator.fails()) {
+      await Sprint.update({ _id: id }, { $set: req.body[0] });
+    } else {
+      validator.errors.first('title');
+      validator.errors.first('description');
+      validator.errors.first('status');
+      validator.errors.first('lead_assigned');
+      validator.errors.first('user_created');
+      validator.errors.first('deadline');
+      validator.errors.first('created_at');
     }
-    return res.status(200).json(result);
+    if (req.body[0].status === 2) {
+      await Task.updateMany({ sprint_assigned: id }, { $set: { status: 2 } });
+    }
+
+    return res.status(200).json(validator);
   } catch (err) {
     return res.status(500).json({
       error: err,
@@ -157,7 +193,7 @@ router.patch('/:sprintId', checkSprintEdit, async (req, res) => {
 router.delete('/:sprintId', checkSprintDelete, async (req, res) => {
   const id = req.params.sprintId;
   try {
-    const sprint = await sprintsService.deleteSprint(id);
+    const sprint = await Sprint.remove({ _id: id });
     clientRed.del('allsprints');
     return res.status(200).json(sprint);
   } catch (err) {
