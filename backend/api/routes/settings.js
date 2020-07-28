@@ -84,20 +84,15 @@ router.patch('/roles/:roleId', checkAuth.main(), async (req, res) => {
       validator.errors.first('name');
     }
 
-    res.status(200).json(validator);
-  } catch (err) {
-    res.status(500).json({
-      error: err,
+    req.body[0].forEach((item) => {
+      roleHasPermission.push({ role: id, permission: item });
     });
-  }
-  req.body[0].forEach((item) => {
-    roleHasPermission.push({ role: id, permission: item });
-  });
-  try {
     await RoleHasPermission.insertMany(roleHasPermission);
     await RoleHasPermission.remove({ role: id, permission: { $in: req.body[1] } });
+
+    return res.status(200).json(validator);
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       error: err,
     });
   }

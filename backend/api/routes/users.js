@@ -304,6 +304,8 @@ router.post('/user/user_has_role/:userId', async (req, res) => {
   try {
     await UserHasRole.insertMany(userHasRole);
     await UserHasRole.remove({ user: userId, role: { $in: req.body[1] } });
+
+    return res.status(200).json({ message: 'Right request' });
   } catch (err) {
     return res.status(500).json({
       error: err,
