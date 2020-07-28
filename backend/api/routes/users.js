@@ -1,4 +1,6 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const Validator = require('validatorjs');
 
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -7,8 +9,11 @@ const multer = require('multer');
 
 const checkAuth = require('../middleware/check-auth');
 
-const usersService = require('../services/users');
-const settingsService = require('../services/settings');
+const User = require('../models/user');
+const Role = require('../models/role');
+const Permission = require('../models/permission');
+const UserHasRole = require('../models/user_has_role');
+const RoleHasPermission = require('../models/role_has_permission');
 
 const clientRed = require('../redis-connection');
 
@@ -16,6 +21,16 @@ const checkUserCreate = checkAuth.scope('create-users');
 const checkUserEdit = checkAuth.scope('edit-users');
 const checkUserDelete = checkAuth.scope('delete-users');
 const checkUserCreateAndEdit = checkAuth.scopes('create-users,edit-users');
+
+const rules = {
+  name: 'string',
+  email: 'email',
+  password: 'string',
+  address: 'string',
+  work_number: 'string',
+  personal_number: 'string',
+  image_path: 'string',
+};
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -54,7 +69,7 @@ router.get('/', checkUserCreateAndEdit, (req, res) => {
       res.send(replyJson);
     } else {
       try {
-        const users = await usersService.getUsers();
+        const users = await User.find();
         users.forEach((value) => {
           value.password = null;
         });
@@ -69,7 +84,7 @@ router.get('/', checkUserCreateAndEdit, (req, res) => {
 });
 
 router.post('/', checkUserCreate, async (req, res) => {
-  const user = await usersService.getUserByEmail(req.body[0].email);
+  const user = await User.find({ email: req.body[0].email });
   if (user.length >= 1) {
     return res.status(409).json({
       message: 'Mail exists',
@@ -82,7 +97,16 @@ router.post('/', checkUserCreate, async (req, res) => {
       });
     }
     try {
-      const result = await usersService.createUser(req, hash);
+      const result = await new User({
+        _id: new mongoose.Types.ObjectId(),
+        email: req.body[0].email,
+        password: hash,
+        name: req.body[0].name,
+        address: req.body[0].address,
+        work_number: req.body[0].work_number,
+        personal_number: req.body[0].personal_number,
+        image_path: req.body[0].image_path,
+      }).save();
       clientRed.del('allusers');
       return res.status(201).json({
         message: 'Handling POST requests to /users',
@@ -99,7 +123,7 @@ router.post('/', checkUserCreate, async (req, res) => {
 router.get('/:userId', checkUserCreate, async (req, res) => {
   const id = req.params.userId;
   try {
-    const user = await usersService.getUserById(id);
+    const user = await User.findById(id);
     user.password = null;
     if (user) {
       return res.status(200).json(user);
@@ -130,8 +154,21 @@ router.patch('/profile/:userId', checkUserEdit, upload.single('image_path'), asy
   }
   if (req.body[0].image_path === null) delete req.body[0].image_path;
   try {
-    const result = await usersService.updateUser(id, req.body[0]);
-    return res.status(200).json(result);
+    const validator = new Validator(req.body[0], rules);
+
+    if (!validator.fails()) {
+      await User.update({ _id: id }, { $set: req.body[0] });
+    } else {
+      validator.errors.first('name');
+      validator.errors.first('email');
+      validator.errors.first('password');
+      validator.errors.first('address');
+      validator.errors.first('work_number');
+      validator.errors.first('personal_number');
+      validator.errors.first('image_path');
+    }
+
+    return res.status(200).json(validator);
   } catch (err) {
     return res.status(500).json({
       error: err,
@@ -147,8 +184,19 @@ router.put('/:userId', checkUserEdit, async (req, res) => {
     delete req.body[0].password;
   }
   try {
-    const result = await usersService.updateUser(id, req.body[0]);
-    return res.status(200).json(result);
+    const validator = new Validator(req.body[0], rules);
+    if (!validator.fails()) {
+      await User.update({ _id: id }, { $set: req.body[0] });
+    } else {
+      validator.errors.first('name');
+      validator.errors.first('email');
+      validator.errors.first('password');
+      validator.errors.first('address');
+      validator.errors.first('work_number');
+      validator.errors.first('personal_number');
+      validator.errors.first('image_path');
+    }
+    return res.status(200).json(validator);
   } catch (err) {
     return res.status(500).json({
       error: err,
@@ -157,16 +205,16 @@ router.put('/:userId', checkUserEdit, async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const user = await usersService.getUserByEmail(req.body[0].email);
+  const user = await User.find({ email: req.body[0].email });
   if (user[0]) {
-    const userHasRole = await usersService.getUserHasRolesById(user[0]._id);
-    const roleHasPermissions = await settingsService.getOneRoleHasPermissions(userHasRole[0].role);
-    const roles = await settingsService.getRoleById(userHasRole[0].role);
+    const userHasRole = await UserHasRole.find({ user: user[0]._id });
+    const roleHasPermissions = await RoleHasPermission.find({ role: userHasRole[0].role });
+    const roles = await Role.find(userHasRole[0].role);
     const perms = [];
     roleHasPermissions.forEach((item) => {
       perms.push(item.permission);
     });
-    const permissions = await settingsService.getPermsOfRole(perms);
+    const permissions = await Permission.find({ _id: { $in: perms } });
     const rolesArr = [];
     // const permissionNames = [];
     const permissionSlugs = [];
@@ -209,7 +257,7 @@ router.post('/login', async (req, res) => {
 router.delete('/:userId', checkUserDelete, async (req, res) => {
   const id = req.params.userId;
   try {
-    const user = await usersService.deleteUser(id);
+    const user = await User.remove({ _id: id });
     clientRed.del('allusers');
     return res.status(200).json(user);
   } catch (err) {
@@ -221,7 +269,7 @@ router.delete('/:userId', checkUserDelete, async (req, res) => {
 
 router.get('/user/user_has_role', async (req, res) => {
   try {
-    const userHasRole = await usersService.getUserHasRoles();
+    const userHasRole = await UserHasRole.find();
     res.status(200).json(userHasRole);
   } catch (err) {
     res.status(500).json({
@@ -234,7 +282,7 @@ router.get('/user/user_has_role/:userId', async (req, res) => {
   const id = req.params.userId;
   const roles = {};
   try {
-    const userHasRole = await usersService.getUserHasRolesById(id);
+    const userHasRole = await UserHasRole.find({ user: id });
     for (let i = 0; i < userHasRole.length; i++) {
       roles[userHasRole[i].role] = userHasRole[i];
     }
@@ -254,14 +302,10 @@ router.post('/user/user_has_role/:userId', async (req, res) => {
     userHasRole.push({ role: item, user: userId });
   });
   try {
-    await usersService.createUserHasRoles(userHasRole);
-  } catch (err) {
-    return res.status(500).json({
-      error: err,
-    });
-  }
-  try {
-    await usersService.deleteUserHasRoles(userId, req.body[1]);
+    await UserHasRole.insertMany(userHasRole);
+    await UserHasRole.remove({ user: userId, role: { $in: req.body[1] } });
+
+    return res.status(200).json({ message: 'Right request' });
   } catch (err) {
     return res.status(500).json({
       error: err,
